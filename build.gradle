@@ -40,7 +40,7 @@ plugins {
     id "org.owasp.dependencycheck" version "6.4.1.1"
 
     // Apply the shadow plugin to build fat jars
-    id "com.github.johnrengelman.shadow" version "7.1.0"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 
     // Apply dependency licence report plugin
     // Requires using version 2.0 or lower as the caching for the checkLicense task
