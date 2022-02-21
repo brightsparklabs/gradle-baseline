@@ -43,10 +43,11 @@ plugins {
     // Apply the shadow plugin to build fat jars
     id "com.github.johnrengelman.shadow" version "7.1.0"
 
-    // Apply dependency licence report plugin
-    // Requires using version 2.0 or lower as the caching for the checkLicense task
-    // was changed to no longer update on file content change
+    // Apply the dependency licence report plugin
     id "com.github.jk1.dependency-license-report" version "2.0"
+
+    // Apply the git hooks plugin for adding default git hooks
+    id "com.github.jakemarsden.git-hooks" version "0.0.2"
 }
 
 // -----------------------------------------------------------------------------
@@ -74,7 +75,8 @@ dependencies {
             "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.17",
             "org.owasp:dependency-check-gradle:6.4.1.1",
             "com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:7.1.0",
-            "com.github.jk1:gradle-license-report:2.0"
+            "com.github.jk1:gradle-license-report:2.0",
+            "com.github.jakemarsden:git-hooks-gradle-plugin:0.0.2"
             )
 
     // Use the awesome Spock testing and specification framework
@@ -190,4 +192,12 @@ spotless {
         greclipse()
         indentWithSpaces(4)
     }
+}
+
+// -----------------------------------------------------------------------------
+// git-hooks-plugin
+// -----------------------------------------------------------------------------
+
+gitHooks {
+    hooks = ['pre-commit': 'spotlessCheck']
 }

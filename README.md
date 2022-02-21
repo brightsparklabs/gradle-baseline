@@ -60,6 +60,7 @@ gradlew --include-build /path/to/gradle-baseline <task>
 - Checks for dependency updates/vulnerabilities.
 - Checks for allowed license on dependencies.
 - Applies  a `VERSION` file to the root of the JAR containing the project version.
+- Adds default git-hooks to apply code formatting before making a commit.
 
 ## Allowed Licenses
 
@@ -74,6 +75,17 @@ expose the config file located at `/brightsparklabs/baseline/allowed-licenses.js
 
 The Documentation for this JSON Format can be found within the [Licence Report
 Docs](https://github.com/jk1/Gradle-License-Report#allowed-licenses-file).
+
+### Override File Caching bug
+
+Due to a bug with the Licence Report plugin. The contents of the override file will not be 
+used correctly by the `bslCheckLicense` task, unless the contents of `/build/reports/dependency-license/` 
+have been deleted prior to running the task.
+
+The following reported issues are likely related to this bug:
+
+- [#182](https://github.com/jk1/Gradle-License-Report/issues/182)
+- [#223](https://github.com/jk1/Gradle-License-Report/issues/223)
 
 ## Bundled Plugins
 
