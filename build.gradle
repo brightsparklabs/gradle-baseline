@@ -72,7 +72,7 @@ dependencies {
             "com.google.errorprone:error_prone_core:2.11.0",
             "com.github.ben-manes:gradle-versions-plugin:0.42.0",
             "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18",
-            "org.owasp:dependency-check-gradle:7.0.0",
+            "org.owasp:dependency-check-gradle:7.0.1",
             "com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:7.1.2",
             "com.github.jk1:gradle-license-report:2.1"
             )
