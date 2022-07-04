@@ -67,7 +67,7 @@ dependencies {
             // Add external plugins here so they can be added via our plugin
             // NOTE: KEEP THESE VERSIONS ALIGNED WITH THE PLUGINS BLOCK
             // NOTE: Obtain plugin dependency strings from plugins.gradle.org page
-            "com.diffplug.spotless:spotless-plugin-gradle:6.3.0",
+            "com.diffplug.spotless:spotless-plugin-gradle:6.8.0",
             "net.ltgt.errorprone:net.ltgt.errorprone.gradle.plugin:2.0.2",
             "com.google.errorprone:error_prone_core:2.11.0",
             "com.github.ben-manes:gradle-versions-plugin:0.42.0",
