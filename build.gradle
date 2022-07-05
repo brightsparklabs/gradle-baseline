@@ -28,7 +28,7 @@ plugins {
     // NOTE: KEEP THESE VERSIONS ALIGNED WITH THE DEPENDENCIES BLOCK
 
     // Apply the Spotless plugin for formatting
-    id "com.diffplug.spotless" version "6.3.0"
+    id "com.diffplug.spotless" version "6.8.0"
 
     // Apply the Error Prone plugin for static code analysis
     id "net.ltgt.errorprone" version "2.0.2"
