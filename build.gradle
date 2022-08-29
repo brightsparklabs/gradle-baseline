@@ -80,7 +80,7 @@ dependencies {
 
     // Use the awesome Spock testing and specification framework.
     // NOTE: Need to stick with groovy-3.0 until Gradle buildscripts support Groovy 4.
-    testImplementation "org.spockframework:spock-core:2.1-M2-groovy-3.0"
+    testImplementation "org.spockframework:spock-core:2.2-M3-groovy-4.0"
 }
 
 // -----------------------------------------------------------------------------
