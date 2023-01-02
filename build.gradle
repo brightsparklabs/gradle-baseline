@@ -70,7 +70,7 @@ dependencies {
             // NOTE: Obtain plugin dependency strings from plugins.gradle.org page.
             "com.diffplug.spotless:spotless-plugin-gradle:6.10.0",
             "net.ltgt.errorprone:net.ltgt.errorprone.gradle.plugin:2.0.2",
-            "com.google.errorprone:error_prone_core:2.15.0",
+            "com.google.errorprone:error_prone_core:2.17.0",
             "com.github.ben-manes:gradle-versions-plugin:0.42.0",
             "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18",
             "org.owasp:dependency-check-gradle:7.1.2",
