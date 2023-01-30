@@ -28,7 +28,7 @@ plugins {
     // NOTE: KEEP THESE VERSIONS ALIGNED WITH THE DEPENDENCIES BLOCK.
 
     // Apply the Spotless plugin for formatting.
-    id "com.diffplug.spotless" version "6.13.0"
+    id "com.diffplug.spotless" version "6.14.0"
 
     // Apply the Error Prone plugin for static code analysis.
     // NOTE: ENSURE `BaselinePlugin.ERRORPRONE_CORE_VERSION` IS UPDATED AS APPROPRIATE.
