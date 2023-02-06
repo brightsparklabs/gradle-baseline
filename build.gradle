@@ -71,7 +71,7 @@ dependencies {
             "com.diffplug.spotless:spotless-plugin-gradle:6.13.0",
             "net.ltgt.errorprone:net.ltgt.errorprone.gradle.plugin:3.0.1",
             "com.google.errorprone:error_prone_core:2.18.0",
-            "com.github.ben-manes:gradle-versions-plugin:0.44.0",
+            "com.github.ben-manes:gradle-versions-plugin:0.45.0",
             "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18",
             "org.owasp:dependency-check-gradle:8.0.1",
             "com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:7.1.2",
