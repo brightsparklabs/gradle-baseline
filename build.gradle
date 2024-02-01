@@ -81,7 +81,7 @@ dependencies {
 
             // We use `platform` to specify AWS SDK dependencies, as this is recommended by Amazon.
             // See https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/setup-project-gradle.html
-            platform('software.amazon.awssdk:bom:2.22.12'),
+            platform('software.amazon.awssdk:bom:2.23.15'),
             'software.amazon.awssdk:s3:'
             )
 
