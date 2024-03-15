@@ -12,3 +12,7 @@ updates:
   - adam-kimpton
   labels:
   - dependencies
+  ignore:
+    - dependency-name: "net.ltgt.errorprone"
+    - dependency-name: "com.google.errorprone:error_prone_core"
+    - dependency-name: "org.spockframework:spock-bom"
