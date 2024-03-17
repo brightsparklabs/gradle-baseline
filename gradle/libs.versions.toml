@@ -21,7 +21,7 @@ pluginVersionErrorprone = "3.1.0"
 #  | || |  | |  __/| |_| |  _ < | |/ ___ \| |\  | | |
 # |___|_|  |_|_|    \___/|_| \_\|_/_/   \_\_| \_| |_|
 #
-# The version of `error_prone_core` dependency is dependendant on the version of
+# The version of the `error_prone_core` dependency is dependent on the version of
 # the `errorprone` plugin (i.e. `pluginVersionErrorprone` above). As detailed in
 # the errorprone plugin's README:
 #
@@ -60,21 +60,21 @@ versionSpockBom = "2.3-groovy-3.0"
 spotless = { id = "com.diffplug.spotless", version.ref = "pluginVersionSpotless" }
 errorProne = { id = "net.ltgt.errorprone", version.ref = "pluginVersionErrorprone" }
 benManesVersions = { id = "com.github.ben-manes.versions", version.ref = "pluginVersionBenManesVersions" }
-useLatestVersions = { id = "se.patrikerdes.use-latest-versions", version.ref = "pluginVersionUseLatestVersions"}
-dependencyCheck = { id = "org.owasp.dependencycheck", version.ref = "pluginVersionDependencyCheck"}
-licenseReport = { id = "com.github.jk1.dependency-license-report", version.ref = "pluginVersionLicenseReport"}
-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "pluginVersionShadow"}
+useLatestVersions = { id = "se.patrikerdes.use-latest-versions", version.ref = "pluginVersionUseLatestVersions" }
+dependencyCheck = { id = "org.owasp.dependencycheck", version.ref = "pluginVersionDependencyCheck" }
+licenseReport = { id = "com.github.jk1.dependency-license-report", version.ref = "pluginVersionLicenseReport" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "pluginVersionShadow" }
 
 [libraries]
 spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "pluginVersionSpotless" }
 errorProne = { group = "net.ltgt.errorprone", name = "net.ltgt.errorprone.gradle.plugin", version.ref = "pluginVersionErrorprone" }
 errorProneCore = { group = "com.google.errorprone", name = "error_prone_core", version.ref = "versionErrorproneCore" }
 benManesVersions = { group = "com.github.ben-manes", name = "gradle-versions-plugin", version.ref = "pluginVersionBenManesVersions" }
-useLatestVersions = { group = "se.patrikerdes", name = "gradle-use-latest-versions-plugin", version.ref = "pluginVersionUseLatestVersions"}
-dependencyCheck = { group = "org.owasp", name = "dependency-check-gradle", version.ref = "pluginVersionDependencyCheck"}
-shadow = { group = "com.github.johnrengelman.shadow", name = "com.github.johnrengelman.shadow.gradle.plugin", version.ref = "pluginVersionShadow"}
-licenseReport = { group = "com.github.jk1", name = "gradle-license-report", version.ref = "pluginVersionLicenseReport"}
-awsSdkBom = { group = "software.amazon.awssdk", name = "bom", version.ref = "versionAwsSdkBom"}
-awsSdkS3 = { group = "software.amazon.awssdk", name = "s3"}
-spockBom = { group = "org.spockframework", name = "spock-bom", version.ref = "versionSpockBom"}
-spockCore = { group = "org.spockframework", name = "spock-core"}
+useLatestVersions = { group = "se.patrikerdes", name = "gradle-use-latest-versions-plugin", version.ref = "pluginVersionUseLatestVersions" }
+dependencyCheck = { group = "org.owasp", name = "dependency-check-gradle", version.ref = "pluginVersionDependencyCheck" }
+shadow = { group = "com.github.johnrengelman.shadow", name = "com.github.johnrengelman.shadow.gradle.plugin", version.ref = "pluginVersionShadow" }
+licenseReport = { group = "com.github.jk1", name = "gradle-license-report", version.ref = "pluginVersionLicenseReport" }
+awsSdkBom = { group = "software.amazon.awssdk", name = "bom", version.ref = "versionAwsSdkBom" }
+awsSdkS3 = { group = "software.amazon.awssdk", name = "s3" }
+spockBom = { group = "org.spockframework", name = "spock-bom", version.ref = "versionSpockBom" }
+spockCore = { group = "org.spockframework", name = "spock-core" }
