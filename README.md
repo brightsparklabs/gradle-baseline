@@ -24,9 +24,8 @@ Applies brightSPARK Labs standardisation to gradle projects.
 
 To publish a new version:
 
-* Update `gradle.properties` ensuring `versionErrorproneCore` is set appropriately as per the notes
-  in there.
-** **YOU MAY NEED TO ROLLBACK DEPENDABOT UPGRADES to `error_prone_core` PRIOR TO RELASE**
+* Update `gradle/libs.versions.toml` ensuring `versionErrorproneCore` is set appropriately as per
+  the notes in there.
 * Ensure `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy` references the same version.
 * Use `git flow` to merge it into `master`.
 * Push `master` and the CI server will publish via `./gradlew publishPlugins`.
@@ -93,24 +92,13 @@ To upgrade the dependencies of this project, in the base directory (which contai
 ./gradlew useLatestVersionsCheck
 ```
 
-This will list all the gradle dependencies that can be upgraded, and after checking these you may
-run:
+This will list all the gradle dependencies that can be upgraded, and after checking these,
+dependency versions can be updated manually within the `gradle/libs.versions.toml` file.
 
-```bash
-./gradlew useLatestVersions
-```
-
-Which will update the `build.gradle` file to use the versions listed by the `useLatestVersionsCheck`
-task.
-
- ___ __  __ ____   ___  ____ _____  _    _   _ _____
-|_ _|  \/  |  _ \ / _ \|  _ \_   _|/ \  | \ | |_   _|
- | || |\/| | |_) | | | | |_) || | / _ \ |  \| | | |
- | || |  | |  __/| |_| |  _ < | |/ ___ \| |\  | | |
-|___|_|  |_|_|    \___/|_| \_\|_/_/   \_\_| \_| |_|
+**IMPORTANT**
 
 * When bumping the `errorprone` plugin, it is important to keep the `error_prone_core` dependency
-  aligned. Please refer to `gradle.properties` for details.
+  aligned. Please refer to `gradle/libs.versions.toml` for details.
 * When bumping `spock` you must stay aligned with the version of Groovy that is used by the current
    gradle version. E.g. Gradle 8.1.1 uses Groovy 3.0, so you cannot use
   `org.spockframework:spock-bom:2.3-groovy-4.0` since that specifies Groovy 4.0.

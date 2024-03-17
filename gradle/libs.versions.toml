@@ -1,0 +1,80 @@
+#  _   _  ____ _______ ______
+# | \ | |/ __ \__   __|  ____|
+# |  \| | |  | | | |  | |__
+# | . ` | |  | | | |  |  __|
+# | |\  | |__| | | |  | |____
+# |_| \_|\____/  |_|  |______|
+#
+# We use this TOML file as a version catalog (see
+# https://docs.gradle.org/current/userguide/platforms.html#sub:conventional-dependencies-toml) to
+# consolidate all of our dependency version declarations in one place. We cannot use the
+# `gradle.properties` file for this because Dependabot does not update dependencies within the
+# `gradle.properties` file (see https://github.com/dependabot/dependabot-core/issues/1618).
+
+[versions]
+pluginVersionSpotless = "6.25.0"
+
+pluginVersionErrorprone = "3.1.0"
+#  ___ __  __ ____   ___  ____ _____  _    _   _ _____
+# |_ _|  \/  |  _ \ / _ \|  _ \_   _|/ \  | \ | |_   _|
+#  | || |\/| | |_) | | | | |_) || | / _ \ |  \| | | |
+#  | || |  | |  __/| |_| |  _ < | |/ ___ \| |\  | | |
+# |___|_|  |_|_|    \___/|_| \_\|_/_/   \_\_| \_| |_|
+#
+# The version of the `error_prone_core` dependency is dependent on the version of
+# the `errorprone` plugin (i.e. `pluginVersionErrorprone` above). As detailed in
+# the errorprone plugin's README:
+#
+#   https://github.com/tbroyer/gradle-errorprone-plugin#usage
+#
+# Whenever `pluginVersionErrorprone` gets updated, do the following:
+#
+#   1. Go to the errorprone plugin's github repo at the relevant version:
+#
+#       https://github.com/tbroyer/gradle-errorprone-plugin/tree/<version>
+#
+#   2. Open up the `build.gradle.kts` file for that version:
+#
+#       https://github.com/tbroyer/gradle-errorprone-plugin/blob/<version>/build.gradle.kts
+#
+#   3. Look for the errorprone version being used (as of 2024-03-06 this was
+#      stored in the variable `errorproneVersion`).
+#
+#   4. Use that version in the variable below.
+#
+# IMPORTANT: If you update this version, ensure you update
+# `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy`.
+versionErrorproneCore = "2.10.0"
+
+pluginVersionBenManesVersions = "0.51.0"
+pluginVersionUseLatestVersions = "0.2.18"
+pluginVersionDependencyCheck = "9.0.9"
+pluginVersionShadow = "8.1.1"
+pluginVersionLicenseReport = "2.5"
+versionAwsSdkBom = "2.25.3"
+# NOTE: Need to stick with groovy-3.0 until Gradle buildscripts support Groovy 4.
+versionSpockBom = "2.3-groovy-3.0"
+
+[plugins]
+# NOTE: Obtain plugin dependency strings from plugins.gradle.org page.
+spotless = { id = "com.diffplug.spotless", version.ref = "pluginVersionSpotless" }
+errorProne = { id = "net.ltgt.errorprone", version.ref = "pluginVersionErrorprone" }
+benManesVersions = { id = "com.github.ben-manes.versions", version.ref = "pluginVersionBenManesVersions" }
+useLatestVersions = { id = "se.patrikerdes.use-latest-versions", version.ref = "pluginVersionUseLatestVersions" }
+dependencyCheck = { id = "org.owasp.dependencycheck", version.ref = "pluginVersionDependencyCheck" }
+licenseReport = { id = "com.github.jk1.dependency-license-report", version.ref = "pluginVersionLicenseReport" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "pluginVersionShadow" }
+
+[libraries]
+spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "pluginVersionSpotless" }
+errorProne = { group = "net.ltgt.errorprone", name = "net.ltgt.errorprone.gradle.plugin", version.ref = "pluginVersionErrorprone" }
+errorProneCore = { group = "com.google.errorprone", name = "error_prone_core", version.ref = "versionErrorproneCore" }
+benManesVersions = { group = "com.github.ben-manes", name = "gradle-versions-plugin", version.ref = "pluginVersionBenManesVersions" }
+useLatestVersions = { group = "se.patrikerdes", name = "gradle-use-latest-versions-plugin", version.ref = "pluginVersionUseLatestVersions" }
+dependencyCheck = { group = "org.owasp", name = "dependency-check-gradle", version.ref = "pluginVersionDependencyCheck" }
+shadow = { group = "com.github.johnrengelman.shadow", name = "com.github.johnrengelman.shadow.gradle.plugin", version.ref = "pluginVersionShadow" }
+licenseReport = { group = "com.github.jk1", name = "gradle-license-report", version.ref = "pluginVersionLicenseReport" }
+awsSdkBom = { group = "software.amazon.awssdk", name = "bom", version.ref = "versionAwsSdkBom" }
+awsSdkS3 = { group = "software.amazon.awssdk", name = "s3" }
+spockBom = { group = "org.spockframework", name = "spock-bom", version.ref = "versionSpockBom" }
+spockCore = { group = "org.spockframework", name = "spock-core" }

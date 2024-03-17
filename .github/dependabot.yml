@@ -12,3 +12,12 @@ updates:
   - adam-kimpton
   labels:
   - dependencies
+  ignore:
+    # The version of the `error_prone_core` dependency is dependent on the version of the
+    # `errorprone` plugin, and they must be kept in sync, so we prevent Dependabot from updating
+    # them.
+    - dependency-name: "net.ltgt.errorprone"
+    - dependency-name: "com.google.errorprone:error_prone_core"
+    # We prevent Dependabot from updating Spock because we need to align the version with whatever
+    # Groovy version the current Gradle version supports.
+    - dependency-name: "org.spockframework:spock-bom"
