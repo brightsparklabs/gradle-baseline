@@ -14,6 +14,8 @@ import groovy.json.JsonSlurper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration
+import software.amazon.awssdk.core.exception.SdkClientException
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
@@ -335,11 +337,15 @@ public class BaselinePlugin implements Plugin<Project> {
      * @param project The Gradle Project object.
      * @param s3DeployConfig The S3 deployment configuration object.
      */
-    private static void setupDeployToS3(final Project project, final S3DeployConfig s3DeployConfig) {
+    private static void setupDeployToS3(
+            final Project project, final S3DeployConfig s3DeployConfig
+    ) {
         final String bucketName = s3DeployConfig.bucketName
         final String region = s3DeployConfig.region
         final String prefix = s3DeployConfig.prefix
         final Set<String> filesToUpload = s3DeployConfig.filesToUpload
+        final String endpointOverride = s3DeployConfig.endpointOverride
+        final String profile = s3DeployConfig.profile
 
         final def bucketNameIsEmpty = Strings.isNullOrEmpty(bucketName)
         final def filesToUploadIsEmpty = filesToUpload == null || filesToUpload.isEmpty()
@@ -351,28 +357,71 @@ public class BaselinePlugin implements Plugin<Project> {
 
         // Error early if configuration in invalid.
         if (bucketNameIsEmpty) {
-            def error = "`bslGradle.deploy.s3.bucketName` cannot be null or empty. Value was: `${bucketName}`"
+            def error = "`bslGradle.deploy.s3.bucketName` cannot be null or empty. Value was:" +
+                    " `${bucketName}`"
             project.logger.error(error)
             throw new IllegalStateException(error)
         }
         if (filesToUploadIsEmpty) {
-            def error = "`bslGradle.deploy.s3.filesToUpload` cannot be null or empty. Value was: ${filesToUpload}"
+            def error = "`bslGradle.deploy.s3.filesToUpload` cannot be null or empty. Value was:" +
+                    " ${filesToUpload}"
             project.logger.error(error)
             throw new IllegalStateException(error)
         }
 
         project.task("bslDeployToS3") {
             group = "brightSPARK Labs - Baseline"
-            description = "Upload files to an S3 bucket. Configure via the `bslBaseline` configuration block."
+            description = "Upload files to an S3 bucket. Configure via the `bslBaseline`" +
+                    " configuration block."
 
             doLast {
                 final S3ClientBuilder s3Builder = S3Client.builder()
+
                 // By default, the AWS SDK will attempt to pull the region from the system.
                 // If configured, we allow for an optional override.
                 if (!Strings.isNullOrEmpty(region)) {
                     s3Builder.region(Region.of(region))
                 }
-                final S3Client s3 = s3Builder.build()
+
+                // By default, the AWS SDK will use the "default" profile from the system.
+                // If configured, we allow for an optional override.
+                if (!Strings.isNullOrEmpty(profile)) {
+                    final ClientOverrideConfiguration.Builder s3OverrideConfigBuilder =
+                            ClientOverrideConfiguration.builder()
+                    s3OverrideConfigBuilder.defaultProfileName(profile)
+                    final s3OverrideConfig = s3OverrideConfigBuilder.build()
+                    s3Builder.overrideConfiguration(s3OverrideConfig)
+                }
+
+                // By default, the AWS SDK will use the default S3 endpoint for the given region.
+                // If configured, we allow for an optional override.
+                if (!Strings.isNullOrEmpty(endpointOverride)) {
+                    URI endpointOverrideURI
+                    try {
+                        endpointOverrideURI = new URI(endpointOverride)
+                    } catch (URISyntaxException e) {
+                        logger.error(
+                                "A URISyntaxException occurred while parsing the" +
+                                " `deploy.s3.endpointOverride` configuration option. Ensure that" +
+                                " the given value is a valid URI."
+                                )
+                        throw e
+                    }
+                    s3Builder.endpointOverride(endpointOverrideURI)
+                }
+
+                S3Client s3Temp
+                try {
+                    s3Temp = s3Builder.build()
+                } catch (SdkClientException e) {
+                    logger.error(
+                            "An SdkClientException occurred. This may have been caused by an" +
+                            " incorrect `deploy.s3.profile` configuration. If the configuration" +
+                            " is correct, ensure that the profile exists in the system."
+                            )
+                    throw e
+                }
+                final S3Client s3 = s3Temp
 
                 try {
                     filesToUpload.each { file ->
@@ -383,13 +432,48 @@ public class BaselinePlugin implements Plugin<Project> {
                                 .bucket(bucketName)
                                 .key(fileName)
                                 .build() as PutObjectRequest
-
                         s3.putObject(putObjectRequest, RequestBody.fromFile(filePath.toFile()))
 
-                        logger.lifecycle("Successfully uploaded file `${fileName}` into bucket `${bucketName}`.")
+                        logger.lifecycle(
+                                "Successfully uploaded file `${fileName}` into bucket" +
+                                " `${bucketName}`."
+                                )
                     }
                 } catch (S3Exception e) {
-                    logger.error("An S3Exception occurred. This may have been caused by an incorrect `deploy.s3.bucketName` configuration.")
+                    logger.error(
+                            "An S3Exception occurred. This may have been caused by:\n" +
+                            "  1. An incorrect `deploy.s3.bucketName` configuration. If the" +
+                            " configuration is correct, ensure that the bucket exists.\n" +
+                            "\n" +
+                            "  2. An incorrect AWS profile configuration. Ensure that the profile" +
+                            " used to access the bucket is configured correctly in the system." +
+                            " This will either be the profile set using the `deploy.s3.profile`" +
+                            " configuration option, or \"default\". The profile can be configured" +
+                            " using the following AWS CLI command:\n" +
+                            "      `aws configure --profile \${PROFILE_NAME}`\n" +
+                            "\n" +
+                            "  3. An incorrect `deploy.s3.endpointOverride` configuration. It's" +
+                            " possible that hitting the incorrect port of a valid S3 service" +
+                            " endpoint will return an S3Exception.\n" +
+                            "\n" +
+                            "  4. The S3 service specified by `deploy.s3.endpointOverride` has" +
+                            " virtual-host-style requests disabled. This will result in a \"The" +
+                            " specified bucket is not valid\" error message below. For more" +
+                            " information on virtual-host-style requests, see" +
+                            " `https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html#virtual-hosted-style-access`." +
+                            " If you're attempting to connect to a local MinIO instance, ensure" +
+                            " the `MINIO_DOMAIN` environment" +
+                            " variable is set. For more information see" +
+                            " `https://min.io/docs/minio/linux/reference/minio-server/settings/core.html#domain`."
+                            )
+                    throw e
+                } catch (SdkClientException e) {
+                    logger.error(
+                            "An SdkClientException occurred. This may have been caused by an" +
+                            " incorrect `deploy.s3.endpointOverride` configuration. If" +
+                            " the configuration is correct, ensure that the S3 service at" +
+                            " the endpoint is running."
+                            )
                     throw e
                 }
             }
