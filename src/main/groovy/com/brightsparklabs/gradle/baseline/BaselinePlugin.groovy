@@ -433,7 +433,8 @@ public class BaselinePlugin implements Plugin<Project> {
                     logger.error(
                             "An SdkClientException occurred. This may have been caused by an" +
                             " incorrect `deploy.s3.profile` configuration. If the configuration" +
-                            " is correct, ensure that the profile exists in the system."
+                            " is correct, ensure that the profile exists in the system, and" +
+                            " \"Default region name\" is set to a non-empty string."
                             )
                     throw e
                 }

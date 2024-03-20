@@ -73,11 +73,38 @@ bslBaseline {
     /** [Optional] The prefix to prepend to uploaded files. Default: None. */
     deploy.s3.prefix = "${project.name}-${project.version}-"
 
-    /** The paths of the files to upload to the S3 bucket. */
+    /**
+     * The absolute filepaths of the files to upload to the S3 bucket. Each filepath is treated
+     * as a regex, and matched against all files in the project's `build` directory. All matched
+     * files are uploaded.
+     */
     deploy.s3.filesToUpload = [
+            // Upload individual files.
             "${layout.buildDirectory.dir('dist').get()}/release.tgz",
             "${layout.buildDirectory.dir('dist').get()}/release.tgz.sha256",
+            // Upload all files in a directory, including files within subdirectories.
+            "${layout.buildDirectory.dir('dist').get()}/.*",
+            // Upload all files in a directory, excluding files within subdirectories.
+            "${layout.buildDirectory.dir('dist').get()}/[^/]*",
     ]
+
+    // NOTE: The following options are useful for development. For example, if you want to test 
+    // uploading files to a local MinIO instance.
+
+    /**
+     * [Optional] The endpoint to upload files to. This value overrides the default AWS
+     * endpoint, and allows files to be uploaded to any S3-compatible storage. For example, files
+     * could be uploaded to a local MinIO instance by setting this value to
+     * "http://localhost:9000". Default: unset.
+     */
+    deploy.s3.endpointOverride = "http://localhost:9000"
+
+    /**
+     * [Optional] The name of the profile used to access the S3 bucket. The profile must exist
+     * within the `~/.aws/credentials` file. If unset, the AWS SDK will use the "default" profile
+     * set within the system. Default: unset.
+     */
+    deploy.s3.profile = "dev"
 }
 ```
 
