@@ -47,7 +47,9 @@ class S3DeployConfig {
     /** [Optional] The prefix to prepend to uploaded files. Default: "". */
     String prefix = ""
 
-    /** The paths of the files to upload to the S3 bucket. */
+    /** The absolute filepaths of the files to upload to the S3 bucket. Each filepath is treated
+     * as a regex, and matched against all files in the project's `build` directory. All matched
+     * files are uploaded. */
     Set<String> filesToUpload
 
     /** [Optional] The endpoint to upload files to. This allows files to be uploaded to any

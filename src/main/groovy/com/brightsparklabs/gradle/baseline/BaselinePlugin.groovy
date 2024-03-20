@@ -9,6 +9,7 @@ package com.brightsparklabs.gradle.baseline
 
 import com.github.jk1.license.filter.LicenseBundleNormalizer
 import com.google.common.base.Strings
+import groovy.io.FileType
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.gradle.api.Plugin
@@ -369,6 +370,21 @@ public class BaselinePlugin implements Plugin<Project> {
             throw new IllegalStateException(error)
         }
 
+        // Get the absolute paths of the files to upload. We search for files in the `build`
+        // directory, and pattern match against their absolute paths.
+        final Set<String> filesToUploadPaths = []
+        for (String fileRegex in filesToUpload) {
+            project.buildDir.eachFileRecurse(FileType.FILES) { File file ->
+                if (file.absolutePath ==~ fileRegex) {
+                    filesToUploadPaths.add(file.absolutePath)
+                }
+            }
+        }
+        for (String filePathString in filesToUploadPaths) {
+            project.logger.lifecycle("Found file to upload: `${filePathString}`")
+        }
+
+
         project.task("bslDeployToS3") {
             group = "brightSPARK Labs - Baseline"
             description = "Upload files to an S3 bucket. Configure via the `bslBaseline`" +
@@ -424,8 +440,8 @@ public class BaselinePlugin implements Plugin<Project> {
                 final S3Client s3 = s3Temp
 
                 try {
-                    filesToUpload.each { file ->
-                        final Path filePath = Paths.get(file)
+                    filesToUploadPaths.each { filePathString ->
+                        final Path filePath = Paths.get(filePathString)
                         final String fileName = getPrefixedFileName(filePath, prefix)
 
                         final PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -462,8 +478,8 @@ public class BaselinePlugin implements Plugin<Project> {
                             " information on virtual-host-style requests, see" +
                             " `https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html#virtual-hosted-style-access`." +
                             " If you're attempting to connect to a local MinIO instance, ensure" +
-                            " the `MINIO_DOMAIN` environment" +
-                            " variable is set. For more information see" +
+                            " the `MINIO_DOMAIN` environment variable is set. For more" +
+                            " information see" +
                             " `https://min.io/docs/minio/linux/reference/minio-server/settings/core.html#domain`."
                             )
                     throw e
