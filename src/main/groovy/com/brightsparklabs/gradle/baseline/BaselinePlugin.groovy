@@ -368,32 +368,28 @@ public class BaselinePlugin implements Plugin<Project> {
             throw new IllegalStateException(error)
         }
 
-        // Get the absolute paths of the files to upload. We search for files in the `build`
-        // directory, and pattern match against their absolute paths.
-        List<File> allBuildFiles = []
-        project.buildDir.eachFileRecurse(FileType.FILES) {allBuildFiles.add(it)}
-
-        final Set<String> filesToUploadPaths = []
-        for (String fileRegex in filesToUpload) {
-            allBuildFiles.each {
-                if (it.absolutePath ==~ fileRegex) {
-                    filesToUploadPaths.add(it.absolutePath)
-                }
-            }
-        }
-        // Compiling the list of files to upload before the execution phase allows us to print a
-        // preview of the detected files to the console whenever the `build` task runs. This is
-        // useful when configuring filepath regexes for `filesToUpload`.
-        filesToUploadPaths.each {project.logger.lifecycle("Found file to upload: `${it}`")}
-
-        // We set the `build` task as a dependency so `filesToUploadPaths` is updated before the
-        // task runs.
-        project.task("bslDeployToS3", dependsOn: "build") {
+        project.task("bslDeployToS3") {
             group = "brightSPARK Labs - Baseline"
             description = "Upload files to an S3 bucket. Configure via the `bslBaseline`" +
                     " configuration block."
 
             doLast {
+                // Get the absolute paths of the files to upload. We search for files in the `build`
+                // directory, and pattern match against their absolute paths.
+                List<File> allBuildFiles = []
+                project.buildDir.eachFileRecurse(FileType.FILES) {allBuildFiles.add(it)}
+
+                final Set<String> filesToUploadPaths = []
+                for (String fileRegex in filesToUpload) {
+                    allBuildFiles.each {
+                        if (it.absolutePath ==~ fileRegex) {
+                            filesToUploadPaths.add(it.absolutePath)
+                        }
+                    }
+                }
+                // TODO RAD-190: Add dry-run option to print collected files without uploading them.
+                filesToUploadPaths.each {project.logger.lifecycle("Found file to upload: `${it}`")}
+
                 final S3ClientBuilder s3Builder = S3Client.builder()
 
                 // By default, the AWS SDK will attempt to pull the region from the system.
