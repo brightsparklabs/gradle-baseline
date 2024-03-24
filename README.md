@@ -108,6 +108,19 @@ bslBaseline {
 }
 ```
 
+### Deploy to S3 task dependency
+
+The `bslDeployToS3` task will upload the files specified with the `deploy.s3.filesToUpload` 
+configuration option. If the files do not exist, the task will do nothing. If another task 
+creates the files, the `bslDeployToS3` task should depend on it. This can be done like so:
+```groovy
+// file: build.gradle
+project.afterEvaluate() {
+    bslDeployToS3.dependsOn(createRelease)
+}
+```
+In this case, `createRelease` is the task that creates the files.
+
 ## Upgrade notes
 
 ### Upgrading dependencies
