@@ -88,7 +88,7 @@ bslBaseline {
             "${layout.buildDirectory.dir('dist').get()}/[^/]*",
     ]
 
-    // NOTE: The following options are useful for development. For example, if you want to test 
+    // NOTE: The following options are useful for development. For example, if you want to test
     // uploading files to a local MinIO instance.
 
     /**
@@ -110,16 +110,17 @@ bslBaseline {
 
 ### Deploy to S3 task dependency
 
-The `bslDeployToS3` task will upload the files specified with the `deploy.s3.filesToUpload` 
-configuration option. If the files do not exist, the task will do nothing. If another task 
-creates the files, the `bslDeployToS3` task should depend on it. This can be done like so:
+The `bslDeployToS3` task will upload the files specified with the `deploy.s3.filesToUpload`
+configuration option. If the files do not exist, the task will do nothing. If another task
+creates the files, the `bslDeployToS3` task should depend on it as per standard Gradle
+configuration. E.g. Assuming the task `createRelease` creates the necessary files for upload:
+
 ```groovy
 // file: build.gradle
 project.afterEvaluate() {
     bslDeployToS3.dependsOn(createRelease)
 }
 ```
-In this case, `createRelease` is the task that creates the files.
 
 ## Upgrade notes
 

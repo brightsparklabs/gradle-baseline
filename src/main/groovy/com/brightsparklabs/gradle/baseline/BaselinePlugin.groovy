@@ -487,11 +487,8 @@ public class BaselinePlugin implements Plugin<Project> {
                     logger.error("""
                             An S3Exception occurred. This may have been caused by:
                               1. ${incorrectBucketNameCause}
-                              
                               2. ${incorrectAwsProfileConfigurationCause}
-                              
                               3. ${incorrectEndpointOverrideCause}
-                              
                               4. ${virtualHostStyleRequestsDisabledCause}
                             """.stripIndent()
                             )
