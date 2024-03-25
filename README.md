@@ -1,20 +1,34 @@
 # gradle-baseline
 
-[![Build Status](https://github.com/brightsparklabs/gradle-baseline/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/brightsparklabs/gradle-baseline/actions/workflows/unit_tests.yml)
+[![Build Status](https://github.com/brightsparklabs/gradle-baseline/actions/workflows/gradle-plugins.yml/badge.svg)](https://github.com/brightsparklabs/gradle-baseline/actions/workflows/gradle-plugins.yml)
 [![Gradle Plugin](https://img.shields.io/gradle-plugin-portal/v/com.brightsparklabs.gradle.baseline)](https://plugins.gradle.org/plugin/com.brightsparklabs.gradle.baseline)
 
 Applies brightSPARK Labs standardisation to gradle projects.
 
-**NOTE: This plugin requires JDK 17 or above and Gradle 8.**
+## Compatibility
+
+| Plugin Version | Gradle Version | Java Version
+| -------------- | -------------- | ------------
+| 4.x.y          | 8.x.y          | 17
+| 3.x.y          | 7.x.y          | 17
+| 2.x.y          | 7.x.y          | 11
+| 1.x.y          | 6.x.y          | 11
 
 ## Build
 
 ```shell
 ./gradlew build
-
-# publish
-./gradlew publishPlugins
 ```
+
+## Publishing
+
+To publish a new version:
+
+* Update `gradle/libs.versions.toml` ensuring `versionErrorproneCore` is set appropriately as per
+  the notes in there.
+* Ensure `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy` references the same version.
+* Use `git flow` to merge it into `master`.
+* Push `master` and the CI server will publish via `./gradlew publishPlugins`.
 
 ## Usage
 
@@ -42,7 +56,7 @@ bslBaseline {
                       | * Refer to LICENSE at repository root for license details.
                       | */
                     """.stripMargin("|")
-    
+
     // ------------------------------------------------------------
     // [Optional] S3 bucket file upload configuration.
     // ------------------------------------------------------------
@@ -59,15 +73,58 @@ bslBaseline {
     /** [Optional] The prefix to prepend to uploaded files. Default: None. */
     deploy.s3.prefix = "${project.name}-${project.version}-"
 
-    /** The paths of the files to upload to the S3 bucket. */
+    /**
+     * The absolute filepaths of the files to upload to the S3 bucket. Each filepath is treated
+     * as a regex, and matched against all files in the project's `build` directory. All matched
+     * files are uploaded.
+     */
     deploy.s3.filesToUpload = [
+            // Upload individual files.
             "${layout.buildDirectory.dir('dist').get()}/release.tgz",
             "${layout.buildDirectory.dir('dist').get()}/release.tgz.sha256",
+            // Upload all files in a directory, including files within subdirectories.
+            "${layout.buildDirectory.dir('dist').get()}/.*",
+            // Upload all files in a directory, excluding files within subdirectories.
+            "${layout.buildDirectory.dir('dist').get()}/[^/]*",
     ]
+
+    // NOTE: The following options are useful for development. For example, if you want to test
+    // uploading files to a local MinIO instance.
+
+    /**
+     * [Optional] The endpoint to upload files to. This value overrides the default AWS
+     * endpoint, and allows files to be uploaded to any S3-compatible storage. For example, files
+     * could be uploaded to a local MinIO instance by setting this value to
+     * "http://localhost:9000". Default: unset.
+     */
+    deploy.s3.endpointOverride = "http://localhost:9000"
+
+    /**
+     * [Optional] The name of the profile used to access the S3 bucket. The profile must exist
+     * within the `~/.aws/credentials` file. If unset, the AWS SDK will use the "default" profile
+     * set within the system. Default: unset.
+     */
+    deploy.s3.profile = "dev"
+}
+```
+
+### Deploy to S3 task dependency
+
+The `bslDeployToS3` task will upload the files specified with the `deploy.s3.filesToUpload`
+configuration option. If the files do not exist, the task will do nothing. If another task
+creates the files, the `bslDeployToS3` task should depend on it as per standard Gradle
+configuration. E.g. Assuming the task `createRelease` creates the necessary files for upload:
+
+```groovy
+// file: build.gradle
+project.afterEvaluate() {
+    bslDeployToS3.dependsOn(createRelease)
 }
 ```
 
 ## Upgrade notes
+
+### Upgrading dependencies
 
 To upgrade the dependencies of this project, in the base directory (which contains the
 `build.gradle` file) run the following command:
@@ -76,18 +133,21 @@ To upgrade the dependencies of this project, in the base directory (which contai
 ./gradlew useLatestVersionsCheck
 ```
 
-This will list all the gradle dependencies that can be upgraded, and after checking these you may
-run:
+This will list all the gradle dependencies that can be upgraded, and after checking these,
+dependency versions can be updated manually within the `gradle/libs.versions.toml` file.
 
-```bash
-./gradlew useLatestVersions
-```
+**IMPORTANT**
 
-Which will update the `build.gradle` file to use the versions listed by the `useLatestVersionsCheck`
-task.
+* When bumping the `errorprone` plugin, it is important to keep the `error_prone_core` dependency
+  aligned. Please refer to `gradle/libs.versions.toml` for details.
+* When bumping `spock` you must stay aligned with the version of Groovy that is used by the current
+   gradle version. E.g. Gradle 8.1.1 uses Groovy 3.0, so you cannot use
+  `org.spockframework:spock-bom:2.3-groovy-4.0` since that specifies Groovy 4.0.
+
+### Upgrading gradle
 
 In order to update the gradle version, you should refer to the relevant documentation provided by
-gradle ([Example](https://docs.gradle.org/current/userguide/upgrading_version_7.html)).
+gradle ([Example](https://docs.gradle.org/current/userguide/upgrading_version_8.html)).
 
 ```bash
 # See deprecation warnings in the console.
@@ -99,10 +159,6 @@ After addressing these warnings you can upgrade to the next version of gradle.
 # Set gradle wrapper version.
 gradle wrapper --gradle-version <VERSION>
 ```
-
-When bumping dependencies the `ERRORPRONE_CORE_VERSION` variable in `BaselinePlugin.groovy` must
-match the `error_prone_core` (not the `errorprone.gradle.plugin`) version, read about this in the
-`errorprone.gradle.plugin` [README](https://github.com/tbroyer/gradle-errorprone-plugin).
 
 This plugin should be tested on a local project before pushing, which can be done with the steps
 in the *"Testing during development"* section.
@@ -142,7 +198,7 @@ gradlew --include-build /path/to/gradle-baseline <task>
 - Applies  a `VERSION` file to the root of the JAR containing the project version.
 - Adds a task to upload files to an S3 bucket.
 
-## Allowed Licenses
+## Allowed licenses
 
 By default, only the following licenses for dependencies are allowed:
 
@@ -156,7 +212,7 @@ expose the config file located at `/brightsparklabs/baseline/allowed-licenses.js
 The Documentation for this JSON Format can be found within the [Licence Report
 Docs](https://github.com/jk1/Gradle-License-Report#allowed-licenses-file).
 
-## Bundled Plugins
+## Bundled plugins
 
 The following plugins are currently bundled in automatically:
 

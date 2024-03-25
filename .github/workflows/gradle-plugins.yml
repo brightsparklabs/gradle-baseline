@@ -1,0 +1,19 @@
+##
+ # Gradle plugins workflow to automate testing, dependency patching and release
+ # publishing.
+ # ______________________________________________________________________________
+ #
+ # Maintained by brightSPARK Labs.
+ # www.brightsparklabs.com
+ ##
+
+name: Gradle Plugins Workflow
+on: [pull_request, push]
+ 
+jobs:
+  call-gradle-workflow:
+    uses: brightsparklabs/github-actions/.github/workflows/gradle-plugins.yml@master
+    secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
