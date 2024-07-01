@@ -14,7 +14,7 @@
 [versions]
 pluginVersionSpotless = "6.25.0"
 
-pluginVersionErrorprone = "3.1.0"
+pluginVersionErrorprone = "4.0.1"
 #  ___ __  __ ____   ___  ____ _____  _    _   _ _____
 # |_ _|  \/  |  _ \ / _ \|  _ \_   _|/ \  | \ | |_   _|
 #  | || |\/| | |_) | | | | |_) || | / _ \ |  \| | | |
