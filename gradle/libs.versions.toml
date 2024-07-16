@@ -14,7 +14,7 @@
 [versions]
 pluginVersionSpotless = "6.25.0"
 
-pluginVersionErrorprone = "3.1.0"
+pluginVersionErrorprone = "4.0.1"
 #  ___ __  __ ____   ___  ____ _____  _    _   _ _____
 # |_ _|  \/  |  _ \ / _ \|  _ \_   _|/ \  | \ | |_   _|
 #  | || |\/| | |_) | | | | |_) || | / _ \ |  \| | | |
@@ -44,14 +44,14 @@ pluginVersionErrorprone = "3.1.0"
 #
 # IMPORTANT: If you update this version, ensure you update
 # `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy`.
-versionErrorproneCore = "2.10.0"
+versionErrorproneCore = "2.20.0"
 
 pluginVersionBenManesVersions = "0.51.0"
 pluginVersionUseLatestVersions = "0.2.18"
-pluginVersionDependencyCheck = "9.0.10"
+pluginVersionDependencyCheck = "10.0.2"
 pluginVersionShadow = "8.1.1"
-pluginVersionLicenseReport = "2.6"
-versionAwsSdkBom = "2.25.11"
+pluginVersionLicenseReport = "2.8"
+versionAwsSdkBom = "2.26.18"
 # NOTE: Need to stick with groovy-3.0 until Gradle buildscripts support Groovy 4.
 versionSpockBom = "2.3-groovy-3.0"
 
