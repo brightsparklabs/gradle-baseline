@@ -66,13 +66,31 @@ public class BaselinePlugin implements Plugin<Project> {
         // set general properties
         project.group = "com.brightsparklabs"
 
-        def versionProcess = "git describe --always --dirty".execute()
-        versionProcess.waitFor()
-        project.version = versionProcess.exitValue() == 0 ? versionProcess.text.trim() : "0.0.0-UNKNOWN"
+        def defaultVersion = '0.0.0-UNKNOWN'
+        // Must set execution directory as in some instance (e.g. Alpine OS) the command
+        // gets run from the Gradle daemon directory rather than the project directory.
+        def versionProcess = "git describe --always --dirty".execute([], project.rootDir)
+        def stdout = new StringBuilder()
+        def stderr = new StringBuilder()
+        versionProcess.waitForProcessOutput(stdout, stderr)
+        if (versionProcess.exitValue() == 0) {
+            project.version = stdout.toString().trim()
+        } else {
+            project.logger.warn(
+                    "{} - Could not derive project version from git. Defaulting to: `{}`\n\tstdout: {}\n\tstderr: {}",
+                    project.displayName,
+                    defaultVersion,
+                    stdout.toString(),
+                    stderr.toString()
+                    )
+            project.version = defaultVersion
+        }
+        project.logger.lifecycle("{} version set to: `{}`", project.displayName, project.version)
 
         def config = project.extensions.create("bslBaseline", BaselinePluginExtension)
 
         // Enforce standards.
+        setupBaselineTask(project, config)
         includeVersionInJar(project)
         setupCodeFormatter(project, config)
         setupStaleDependencyChecks(project)
@@ -104,6 +122,25 @@ public class BaselinePlugin implements Plugin<Project> {
     // --------------------------------------------------------------------------
     // PRIVATE METHODS
     // -------------------------------------------------------------------------
+
+    private void setupBaselineTask(Project project, BaselinePluginExtension config) {
+        project.task("bslBaseline") {
+            group = "brightSPARK Labs - Baseline"
+            description = "Prints details of the BSL Baseline task."
+
+            doLast {
+                println("""
+                project: ${project.displayName}
+                projectVersion: ${project.version}
+                projectGroup: ${project.group}
+                projectDir: ${project.projectDir}
+                gradleCurrentDir: ${project.file(".")}
+                javaCurrentDir: ${Path.of("").toAbsolutePath()}
+                shellCurrentDir: ${"pwd".execute().text.trim()}
+                """)
+            }
+        }
+    }
 
     private void includeVersionInJar(Project project) {
         def versionFile = project.file("${this.baselineBuildDir}/VERSION")
