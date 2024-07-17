@@ -10,11 +10,9 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ## [Unreleased] - YYYY-MM-DD
 
-[Unreleased]: https://github.com/brightsparklabs/appcli/compare/4.5.0...HEAD
+[Unreleased]: https://github.com/brightsparklabs/appcli/compare/4.6.0...HEAD
 
 ### Added
-
-* TERA-1718: Added `bslBaseline` task for printing details of the plugin.
 
 ### Changed
 
@@ -24,9 +22,21 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ### Fixed
 
-* TERA-1718: Ensure `git describe` command always runs from within root project directory.
-
 ### Security
+
+---
+
+## [4.6.0] - 2024.07.17
+
+[4.6.0]: https://github.com/brightsparklabs/appcli/compare/4.5.0...4.6.0
+
+### Added
+
+* TERA-1718: Added `bslBaseline` task for printing details of the plugin.
+
+### Fixed
+
+* TERA-1718: Ensure `git describe` command always runs from within root project directory.
 
 ---
 
