@@ -15,12 +15,15 @@ import groovy.json.JsonSlurper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.logging.Logger
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration
 import software.amazon.awssdk.core.exception.SdkClientException
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.S3ClientBuilder
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request
+import software.amazon.awssdk.services.s3.model.NoSuchBucketException
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import software.amazon.awssdk.services.s3.model.S3Exception
 
@@ -475,23 +478,49 @@ public class BaselinePlugin implements Plugin<Project> {
                     throw e
                 }
 
+                // Build the request for retrieving S3Objects from the given `bucketName` within the `prefix` directory.
+                final ListObjectsV2Request requestForS3Contents = ListObjectsV2Request.builder()
+                        .bucket(bucketName)
+                        .prefix(prefix)
+                        .build() as ListObjectsV2Request
+
                 try {
+                    // Get the existing files from the `bucketName` under the `prefix` directory.
+                    // Then calculate how many occurrences of each file (and it's copies) exist.
+                    // I.e. if foo.txt, and foo.txt.copy exist we will get [foo.txt: 2]
+                    final Map<String, Integer> existingFileNameCounts = s3.listObjectsV2(requestForS3Contents)
+                            .contents()
+                            .collect {
+                                it.key()
+                                        // take everything from the filename before ".copy"
+                                        .split(".copy", 2)
+                                        .first()
+                            }
+                            .countBy { it }
+
                     filesToUploadPaths.each {
                         final Path filePath = Paths.get(it)
-                        final String fileName = getPrefixedFileName(filePath, prefix)
+                        final String sourceFileName = getPrefixedFileName(filePath, prefix)
+                        final String s3FileName =
+                                generateS3FileName(sourceFileName, bucketName, existingFileNameCounts, logger)
 
                         final PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                                 .bucket(bucketName)
-                                .key(fileName)
+                                .key(s3FileName)
                                 .build() as PutObjectRequest
                         s3.putObject(putObjectRequest, RequestBody.fromFile(filePath.toFile()))
 
                         logger.lifecycle("""
-                                Successfully uploaded file `${fileName}` into bucket
-                                 `${bucketName}`.
+                                Successfully uploaded file `${s3FileName}` into bucket `${bucketName}`.
                                 """.stripIndent().replaceAll("\n", "")
                                 )
                     }
+                } catch (NoSuchBucketException e) {
+                    logger.error("""
+                            A NoSuchBucketException occurred. The specified `deploy.s3.bucketName` [${bucketName}] does not exist.
+                            """.stripIndent()
+                            )
+                    throw e
                 } catch (S3Exception e) {
                     String incorrectBucketNameCause = """
                             An incorrect `deploy.s3.bucketName` configuration. If the
@@ -559,6 +588,45 @@ public class BaselinePlugin implements Plugin<Project> {
             return fileName
         }
         return "${prefix}${fileName}"
+    }
+
+    /**
+     * Generate the filename that will be used within the given s3 bucket {@code bucketName}.
+     * If the filename already exists within the bucket, the filename will be
+     * suffixed with {@code `.copy`} to prevent overwriting an existing file within the bucket.<p>
+     *
+     * I.e. if {@code foo.txt} exists in the bucket, then the new uploaded file will be named
+     * {@code foo.txt.copy}. If {@code foo.txt.copy} already exists it will be uploaded as
+     * {@code foo.txt.copy.copy}
+     *
+     * @param sourceFileName Name of the file attempting to be uploaded to the bucket.
+     * @param bucketName Name of the bucket attempting to be uploaded to.
+     * @param existingFileNameCounts Map of files that exist matching given sourceFileName to the number of copies present.
+     * @param logger the class logger.
+     * @return the name that will be used for the file upload.
+     */
+    static final generateS3FileName(
+            final String sourceFileName,
+            final String bucketName,
+            final Map<String, Integer> existingFileNameCounts,
+            final Logger logger) {
+        final StringBuilder s3FileNameBuilder = new StringBuilder(sourceFileName)
+
+        // If the `sourceFileName` is not found in `existingFileNameCounts` then the no file (or copies) exist,
+        // and copyCount is 0.
+        final int copyCount = existingFileNameCounts.getOrDefault(sourceFileName, 0)
+
+        if (copyCount > 0) {
+            s3FileNameBuilder.append(".copy" * copyCount)
+            logger.lifecycle("""
+                                Upload would overwrite file: `${sourceFileName}` which has [${copyCount-1}] copies in bucket `${bucketName}`.
+                                """.stripIndent().replaceAll("\n", ""))
+            logger.lifecycle("""
+                                This will be uploaded as: `${s3FileNameBuilder}`.
+                             """.stripIndent().replaceAll("\n", ""))
+        }
+
+        return s3FileNameBuilder.toString()
     }
 
     /**
