@@ -12,7 +12,7 @@
 plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins.
     id "java-gradle-plugin"
-    id "com.gradle.plugin-publish" version "1.2.1"
+    id "com.gradle.plugin-publish" version "1.2.2"
     id "maven-publish"
 
     // Apply the Groovy plugin to add support for Groovy.
