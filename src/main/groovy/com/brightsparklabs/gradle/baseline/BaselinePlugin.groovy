@@ -15,7 +15,6 @@ import groovy.json.JsonSlurper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.logging.Logger
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration
 import software.amazon.awssdk.core.exception.SdkClientException
 import software.amazon.awssdk.core.sync.RequestBody
@@ -385,6 +384,7 @@ public class BaselinePlugin implements Plugin<Project> {
         final Optional<String> region = Optional.ofNullable(s3DeployConfig.region)
         final String prefix = s3DeployConfig.prefix
         final Set<String> filesToUpload = s3DeployConfig.filesToUpload
+        final String s3UploadOverwriteOption = s3DeployConfig.uploadOverwriteMode
         final Optional<String> endpointOverride = Optional.ofNullable(s3DeployConfig.endpointOverride)
         final Optional<String> profile = Optional.ofNullable(s3DeployConfig.profile)
 
@@ -397,6 +397,14 @@ public class BaselinePlugin implements Plugin<Project> {
         }
 
         // Error early if configuration in invalid.
+        final Set<String> allowedS3OverwriteOptions = ["skip", "overwrite", "error"]
+        final boolean invalidS3OverwriteOptionProvided = !allowedS3OverwriteOptions.contains(s3UploadOverwriteOption)
+
+        if (invalidS3OverwriteOptionProvided) {
+            def error = "`bslGradle.deploy.s3.uploadOverwriteMode` can only be one of [\"skip\", \"overwrite\", \"error\"]. Value was: `${s3UploadOverwriteOption}`"
+            project.logger.error(error)
+            throw new IllegalStateException(error)
+        }
         if (bucketNameIsEmpty) {
             def error = "`bslGradle.deploy.s3.bucketName` cannot be null or empty. Value was: `${bucketName}`"
             project.logger.error(error)
@@ -486,32 +494,43 @@ public class BaselinePlugin implements Plugin<Project> {
 
                 try {
                     // Get the existing files from the `bucketName` under the `prefix` directory.
-                    // Then calculate how many occurrences of each file (and it's copies) exist.
-                    // I.e. if foo.txt, and foo.txt.copy exist we will get [foo.txt: 2]
-                    final Map<String, Integer> existingFileNameCounts = s3.listObjectsV2(requestForS3Contents)
+                    final List existingFileNames = s3.listObjectsV2(requestForS3Contents)
                             .contents()
-                            .collect {
-                                it.key()
-                                        // take everything from the filename before ".copy"
-                                        .split(".copy", 2)
-                                        .first()
-                            }
-                            .countBy { it }
+                            .collect { it.key() }
 
                     filesToUploadPaths.each {
                         final Path filePath = Paths.get(it)
                         final String sourceFileName = getPrefixedFileName(filePath, prefix)
-                        final String s3FileName =
-                                generateS3FileName(sourceFileName, bucketName, existingFileNameCounts, logger)
+
+                        if (existingFileNames.contains(sourceFileName)) {
+                            logger.lifecycle("""
+                                        Upload would overwrite file: `${sourceFileName}` in bucket `${bucketName}`.
+                                    """.stripIndent().replaceAll("\n", ""))
+
+                            switch (s3UploadOverwriteOption) {
+                                case "skip":
+                                    def message = "`bslGradle.deploy.s3.uploadOverwriteMode` is set to \"skip\", this file will be skipped."
+                                    logger.lifecycle(message)
+                                    return
+                                case "overwrite":
+                                    def message = "`bslGradle.deploy.s3.uploadOverwriteMode` is set to \"overwrite\", this file will be overwritten."
+                                    logger.lifecycle(message)
+                                    break
+                                case "error":
+                                    def error = "`bslGradle.deploy.s3.uploadOverwriteMode` is set to \"error\" aborting upload."
+                                    logger.error(error)
+                                    throw new RuntimeException(error)
+                            }
+                        }
 
                         final PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                                 .bucket(bucketName)
-                                .key(s3FileName)
+                                .key(sourceFileName)
                                 .build() as PutObjectRequest
                         s3.putObject(putObjectRequest, RequestBody.fromFile(filePath.toFile()))
 
                         logger.lifecycle("""
-                                Successfully uploaded file `${s3FileName}` into bucket `${bucketName}`.
+                                Successfully uploaded file `${sourceFileName}` into bucket `${bucketName}`.
                                 """.stripIndent().replaceAll("\n", "")
                                 )
                     }
@@ -588,45 +607,6 @@ public class BaselinePlugin implements Plugin<Project> {
             return fileName
         }
         return "${prefix}${fileName}"
-    }
-
-    /**
-     * Generate the filename that will be used within the given s3 bucket {@code bucketName}.
-     * If the filename already exists within the bucket, the filename will be
-     * suffixed with {@code `.copy`} to prevent overwriting an existing file within the bucket.<p>
-     *
-     * I.e. if {@code foo.txt} exists in the bucket, then the new uploaded file will be named
-     * {@code foo.txt.copy}. If {@code foo.txt.copy} already exists it will be uploaded as
-     * {@code foo.txt.copy.copy}
-     *
-     * @param sourceFileName Name of the file attempting to be uploaded to the bucket.
-     * @param bucketName Name of the bucket attempting to be uploaded to.
-     * @param existingFileNameCounts Map of files that exist matching given sourceFileName to the number of copies present.
-     * @param logger the class logger.
-     * @return the name that will be used for the file upload.
-     */
-    static final generateS3FileName(
-            final String sourceFileName,
-            final String bucketName,
-            final Map<String, Integer> existingFileNameCounts,
-            final Logger logger) {
-        final StringBuilder s3FileNameBuilder = new StringBuilder(sourceFileName)
-
-        // If the `sourceFileName` is not found in `existingFileNameCounts` then the no file (or copies) exist,
-        // and copyCount is 0.
-        final int copyCount = existingFileNameCounts.getOrDefault(sourceFileName, 0)
-
-        if (copyCount > 0) {
-            s3FileNameBuilder.append(".copy" * copyCount)
-            logger.lifecycle("""
-                                Upload would overwrite file: `${sourceFileName}` which has [${copyCount-1}] copies in bucket `${bucketName}`.
-                                """.stripIndent().replaceAll("\n", ""))
-            logger.lifecycle("""
-                                This will be uploaded as: `${s3FileNameBuilder}`.
-                             """.stripIndent().replaceAll("\n", ""))
-        }
-
-        return s3FileNameBuilder.toString()
     }
 
     /**
