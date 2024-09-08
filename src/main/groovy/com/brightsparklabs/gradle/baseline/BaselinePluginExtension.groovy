@@ -55,6 +55,17 @@ class S3DeployConfig {
     Set<String> filesToUpload
 
     /**
+     * [Optional] The overwrite option to utilise for uploading files to s3.
+     *
+     * skip : does not copy the file up - print a warning. (default).
+     * overwrite : overwrites existing file with new one (people can choose this if they have turned s3 versioning on).
+     * error : raise error and cancel.
+     *
+     * Default: "skip".
+     */
+    String uploadOverwriteMode = "skip"
+
+    /**
      * [Optional] The endpoint to upload files to. This value overrides the default AWS
      * endpoint, and allows files to be uploaded to any S3-compatible storage. For example, files
      * could be uploaded to a local MinIO instance by setting this value to

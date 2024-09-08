@@ -21,6 +21,8 @@ import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.S3ClientBuilder
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request
+import software.amazon.awssdk.services.s3.model.NoSuchBucketException
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import software.amazon.awssdk.services.s3.model.S3Exception
 
@@ -382,6 +384,7 @@ public class BaselinePlugin implements Plugin<Project> {
         final Optional<String> region = Optional.ofNullable(s3DeployConfig.region)
         final String prefix = s3DeployConfig.prefix
         final Set<String> filesToUpload = s3DeployConfig.filesToUpload
+        final String s3UploadOverwriteOption = s3DeployConfig.uploadOverwriteMode
         final Optional<String> endpointOverride = Optional.ofNullable(s3DeployConfig.endpointOverride)
         final Optional<String> profile = Optional.ofNullable(s3DeployConfig.profile)
 
@@ -394,6 +397,14 @@ public class BaselinePlugin implements Plugin<Project> {
         }
 
         // Error early if configuration in invalid.
+        final Set<String> allowedS3OverwriteOptions = ["skip", "overwrite", "error"]
+        final boolean invalidS3OverwriteOptionProvided = !allowedS3OverwriteOptions.contains(s3UploadOverwriteOption)
+
+        if (invalidS3OverwriteOptionProvided) {
+            def error = "`bslGradle.deploy.s3.uploadOverwriteMode` can only be one of [\"skip\", \"overwrite\", \"error\"]. Value was: `${s3UploadOverwriteOption}`"
+            project.logger.error(error)
+            throw new IllegalStateException(error)
+        }
         if (bucketNameIsEmpty) {
             def error = "`bslGradle.deploy.s3.bucketName` cannot be null or empty. Value was: `${bucketName}`"
             project.logger.error(error)
@@ -475,23 +486,60 @@ public class BaselinePlugin implements Plugin<Project> {
                     throw e
                 }
 
+                // Build the request for retrieving S3Objects from the given `bucketName` within the `prefix` directory.
+                final ListObjectsV2Request requestForS3Contents = ListObjectsV2Request.builder()
+                        .bucket(bucketName)
+                        .prefix(prefix)
+                        .build() as ListObjectsV2Request
+
                 try {
+                    // Get the existing files from the `bucketName` under the `prefix` directory.
+                    final List existingFileNames = s3.listObjectsV2(requestForS3Contents)
+                            .contents()
+                            .collect { it.key() }
+
                     filesToUploadPaths.each {
                         final Path filePath = Paths.get(it)
-                        final String fileName = getPrefixedFileName(filePath, prefix)
+                        final String sourceFileName = getPrefixedFileName(filePath, prefix)
+
+                        if (existingFileNames.contains(sourceFileName)) {
+                            logger.lifecycle("""
+                                        Upload would overwrite file: `${sourceFileName}` in bucket `${bucketName}`.
+                                    """.stripIndent().replaceAll("\n", ""))
+
+                            switch (s3UploadOverwriteOption) {
+                                case "skip":
+                                    def message = "`bslGradle.deploy.s3.uploadOverwriteMode` is set to \"skip\", this file will be skipped."
+                                    logger.lifecycle(message)
+                                    return
+                                case "overwrite":
+                                    def message = "`bslGradle.deploy.s3.uploadOverwriteMode` is set to \"overwrite\", this file will be overwritten."
+                                    logger.lifecycle(message)
+                                    break
+                                case "error":
+                                    def error = "`bslGradle.deploy.s3.uploadOverwriteMode` is set to \"error\" aborting upload."
+                                    logger.error(error)
+                                    throw new RuntimeException(error)
+                            }
+                        }
 
                         final PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                                 .bucket(bucketName)
-                                .key(fileName)
+                                .key(sourceFileName)
                                 .build() as PutObjectRequest
                         s3.putObject(putObjectRequest, RequestBody.fromFile(filePath.toFile()))
 
                         logger.lifecycle("""
-                                Successfully uploaded file `${fileName}` into bucket
-                                 `${bucketName}`.
+                                Successfully uploaded file `${sourceFileName}` into bucket `${bucketName}`.
                                 """.stripIndent().replaceAll("\n", "")
                                 )
                     }
+                } catch (NoSuchBucketException e) {
+                    logger.error("""
+                            A NoSuchBucketException occurred. The specified `deploy.s3.bucketName` [${bucketName}] does not exist.
+                            """.stripIndent()
+                            )
+                    throw e
                 } catch (S3Exception e) {
                     String incorrectBucketNameCause = """
                             An incorrect `deploy.s3.bucketName` configuration. If the

@@ -8,27 +8,23 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ---
 
-## [Unreleased] - YYYY-MM-DD
+## [4.7.0] - 2024-09-09
 
-[Unreleased]: https://github.com/brightsparklabs/appcli/compare/4.6.0...HEAD
+[4.7.0]: https://github.com/brightsparklabs/gradle-baseline/compare/4.6.0...4.7.0
 
 ### Added
 
-### Changed
-
-### Deprecated
-
-### Removed
+* AF-143: Added S3 upload overwrite options, and upload files under prefixes.
 
 ### Fixed
 
-### Security
+* AF-143: Fix incorrect branch comparison URLs in CHANGELOG.
 
 ---
 
 ## [4.6.0] - 2024.07.17
 
-[4.6.0]: https://github.com/brightsparklabs/appcli/compare/4.5.0...4.6.0
+[4.6.0]: https://github.com/brightsparklabs/gradle-baseline/compare/4.5.0...4.6.0
 
 ### Added
 
@@ -42,7 +38,7 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ## [4.5.0] - 2024-07-16
 
-[4.5.0]: https://github.com/brightsparklabs/appcli/compare/0.1.0...4.5.0
+[4.5.0]: https://github.com/brightsparklabs/gradle-baseline/compare/0.1.0...4.5.0
 
 _No changelog for this release._
 
@@ -52,7 +48,7 @@ _No changelog for this release._
 
 ## [Unreleased] - YYYY-MM-DD
 
-[Unreleased]: https://github.com/brightsparklabs/appcli/compare/x.y.z...HEAD
+[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/x.y.z...HEAD
 
 ### Added
 
