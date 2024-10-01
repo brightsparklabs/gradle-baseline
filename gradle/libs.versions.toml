@@ -51,7 +51,7 @@ pluginVersionUseLatestVersions = "0.2.18"
 pluginVersionDependencyCheck = "10.0.3"
 pluginVersionShadow = "8.1.1"
 pluginVersionLicenseReport = "2.9"
-versionAwsSdkBom = "2.27.17"
+versionAwsSdkBom = "2.28.12"
 # NOTE: Need to stick with groovy-3.0 until Gradle buildscripts support Groovy 4.
 versionSpockBom = "2.3-groovy-3.0"
 
