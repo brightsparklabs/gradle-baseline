@@ -8,6 +8,16 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ---
 
+## [4.8.0] - 2024-11-12
+
+[4.8.0]: https://github.com/brightsparklabs/gradle-baseline/compare/4.7.0...4.8.0
+
+### Changed
+
+* RAD-203: Applied major dependency patching.
+
+---
+
 ## [4.7.0] - 2024-09-09
 
 [4.7.0]: https://github.com/brightsparklabs/gradle-baseline/compare/4.6.0...4.7.0
