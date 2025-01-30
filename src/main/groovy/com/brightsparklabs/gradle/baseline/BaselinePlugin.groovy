@@ -288,6 +288,10 @@ public class BaselinePlugin implements Plugin<Project> {
     private static void setupShadowJar(final Project project) {
         project.plugins.apply "java"
         project.plugins.apply "com.github.johnrengelman.shadow"
+        // Set zip64 to true.
+        project.tasks.named("shadowJar") {
+            it.setProperty("zip64", true)
+        }
         addTaskAlias(project, project.shadowJar)
     }
 
