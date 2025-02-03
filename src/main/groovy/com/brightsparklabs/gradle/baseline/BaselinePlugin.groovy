@@ -15,6 +15,7 @@ import groovy.json.JsonSlurper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.tasks.bundling.Zip
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration
 import software.amazon.awssdk.core.exception.SdkClientException
 import software.amazon.awssdk.core.sync.RequestBody
@@ -288,10 +289,16 @@ public class BaselinePlugin implements Plugin<Project> {
     private static void setupShadowJar(final Project project) {
         project.plugins.apply "java"
         project.plugins.apply "com.github.johnrengelman.shadow"
-        // Set zip64 to true.
+
+        // Set zip64 to true so that our zip files are able to contain more than 65535 files
+        // and support files greater than 4GB in size.
         project.tasks.named("shadowJar") {
             it.setProperty("zip64", true)
         }
+        project.tasks.withType(Zip).configureEach {
+            it.setZip64(true)
+        }
+
         addTaskAlias(project, project.shadowJar)
     }
 
