@@ -12,7 +12,7 @@
 # `gradle.properties` file (see https://github.com/dependabot/dependabot-core/issues/1618).
 
 [versions]
-pluginVersionSpotless = "6.25.0"
+pluginVersionSpotless = "7.0.2"
 
 pluginVersionErrorprone = "4.1.0"
 #  ___ __  __ ____   ___  ____ _____  _    _   _ _____
@@ -46,15 +46,15 @@ pluginVersionErrorprone = "4.1.0"
 # `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy`.
 versionErrorproneCore = "2.20.0"
 
-pluginVersionBenManesVersions = "0.51.0"
+pluginVersionBenManesVersions = "0.52.0"
 pluginVersionUseLatestVersions = "0.2.18"
-pluginVersionDependencyCheck = "11.1.0"
+pluginVersionDependencyCheck = "12.1.0"
 pluginVersionShadow = "8.1.1"
 pluginVersionLicenseReport = "2.9"
-versionAwsSdkBom = "2.29.10"
+versionAwsSdkBom = "2.30.31"
 # NOTE: Need to stick with groovy-3.0 until Gradle buildscripts support Groovy 4. See
 # https://docs.gradle.org/current/userguide/compatibility.html#groovy
-versionSpockBom = "2.3-groovy-3.0"
+versionSpockBom = "2.4-M5-groovy-3.0"
 
 [plugins]
 # NOTE: Obtain plugin dependency strings from plugins.gradle.org page.
