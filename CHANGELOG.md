@@ -8,16 +8,17 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ---
 
-## [Unreleased - Current] - YYYY-MM-DD
+## [4.9.0] - 2025-03-03
+
+[4.9.0]: https://github.com/brightsparklabs/gradle-baseline/compare/4.8.0...4.9.0
 
 ### Added
 
 * RAD-174: Globally set zip64 to true.
-* RAD-213: Applied major dependency patching.
 
 ### Changed
 
-### Fixed
+* RAD-213: Applied major dependency patching.
 
 ---
 
