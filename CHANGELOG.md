@@ -13,6 +13,7 @@ The changelog is applicable from version `4.6.0` onwards.
 ### Added
 
 * RAD-174: Globally set zip64 to true.
+* RAD-213: Applied major dependency patching.
 
 ### Changed
 
