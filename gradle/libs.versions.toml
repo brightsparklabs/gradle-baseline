@@ -47,7 +47,7 @@ pluginVersionErrorprone = "4.3.0"
 versionErrorproneCore = "2.20.0"
 
 pluginVersionBenManesVersions = "0.52.0"
-pluginVersionUseLatestVersions = "0.2.18"
+pluginVersionUseLatestVersions = "0.2.19"
 pluginVersionDependencyCheck = "12.1.3"
 pluginVersionShadow = "8.1.1"
 pluginVersionLicenseReport = "2.9"
