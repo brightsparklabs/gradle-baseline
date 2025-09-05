@@ -9,6 +9,7 @@ Applies brightSPARK Labs standardisation to gradle projects.
 
 | Plugin Version | Gradle Version | Java Version
 | -------------- | -------------- | ------------
+| 5.x.y          | 9.x.y          | 17
 | 4.x.y          | 8.x.y          | 17
 | 3.x.y          | 7.x.y          | 17
 | 2.x.y          | 7.x.y          | 11
