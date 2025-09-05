@@ -8,6 +8,14 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ---
 
+## [Unreleased] - YYYY-MM-DD
+
+[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/4.9.0...HEAD
+
+### Changed
+
+* RAD-237: Applied major dependency patching. Bumped Gradle 8 to latest minor release.
+
 ## [4.9.0] - 2025-03-03
 
 [4.9.0]: https://github.com/brightsparklabs/gradle-baseline/compare/4.8.0...4.9.0
