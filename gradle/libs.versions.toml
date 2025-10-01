@@ -46,7 +46,7 @@ pluginVersionErrorprone = "4.3.0"
 # `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy`.
 versionErrorproneCore = "2.20.0"
 
-pluginVersionBenManesVersions = "0.52.0"
+pluginVersionBenManesVersions = "0.53.0"
 pluginVersionUseLatestVersions = "0.2.19"
 pluginVersionDependencyCheck = "12.1.6"
 pluginVersionShadow = "8.1.1"
