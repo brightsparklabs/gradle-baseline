@@ -173,7 +173,7 @@ public class BaselinePlugin implements Plugin<Project> {
                 // Always format Gradle files.
                 groovyGradle {
                     greclipse()
-                    indentWithSpaces(4)
+                    leadingTabsToSpaces(4)
 
                     // Allow formatting to be disabled via: `spotless:off` / `spotless:on` comments.
                     toggleOffOn()
@@ -196,7 +196,7 @@ public class BaselinePlugin implements Plugin<Project> {
                         excludeJava()
 
                         greclipse()
-                        indentWithSpaces(4)
+                        leadingTabsToSpaces(4)
 
                         // Allow formatting to be disabled via: `spotless:off` / `spotless:on` comments.
                         toggleOffOn()
