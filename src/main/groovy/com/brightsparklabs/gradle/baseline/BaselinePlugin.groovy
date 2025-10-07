@@ -99,7 +99,7 @@ public class BaselinePlugin implements Plugin<Project> {
         setupStaleDependencyChecks(project)
         setupTestCoverage(project)
         setupVulnerabilityDependencyChecks(project)
-        setupShadowJar(project)
+        setupShadowJar(project, config)
         setupDependencyLicenseReport(project)
         setupDeployment(project, config)
 
@@ -173,7 +173,7 @@ public class BaselinePlugin implements Plugin<Project> {
                 // Always format Gradle files.
                 groovyGradle {
                     greclipse()
-                    indentWithSpaces(4)
+                    leadingTabsToSpaces(4)
 
                     // Allow formatting to be disabled via: `spotless:off` / `spotless:on` comments.
                     toggleOffOn()
@@ -196,7 +196,7 @@ public class BaselinePlugin implements Plugin<Project> {
                         excludeJava()
 
                         greclipse()
-                        indentWithSpaces(4)
+                        leadingTabsToSpaces(4)
 
                         // Allow formatting to be disabled via: `spotless:off` / `spotless:on` comments.
                         toggleOffOn()
@@ -286,20 +286,27 @@ public class BaselinePlugin implements Plugin<Project> {
         addTaskAlias(project, project.dependencyCheckAnalyze)
     }
 
-    private static void setupShadowJar(final Project project) {
-        project.plugins.apply "java"
-        project.plugins.apply "com.github.johnrengelman.shadow"
+    private static void setupShadowJar(final Project project, BaselinePluginExtension config) {
+        project.afterEvaluate {
+            if (!config.enablePlugins.shadowJar) {
+                project.logger.lifecycle("Not appling the `shadowJar` plugin from BSL gradle-baseline")
+                return
+            }
 
-        // Set zip64 to true so that our zip files are able to contain more than 65535 files
-        // and support files greater than 4GB in size.
-        project.tasks.named("shadowJar") {
-            it.setProperty("zip64", true)
-        }
-        project.tasks.withType(Zip).configureEach {
-            it.setZip64(true)
-        }
+            project.plugins.apply "java"
+            project.plugins.apply "com.github.johnrengelman.shadow"
 
-        addTaskAlias(project, project.shadowJar)
+            // Set zip64 to true so that our zip files are able to contain more than 65535 files
+            // and support files greater than 4GB in size.
+            project.tasks.named("shadowJar") {
+                it.setProperty("zip64", true)
+            }
+            project.tasks.withType(Zip).configureEach {
+                it.setZip64(true)
+            }
+
+            addTaskAlias(project, project.shadowJar)
+        }
     }
 
     private void setupDependencyLicenseReport(final Project project) {

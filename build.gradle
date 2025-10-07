@@ -169,7 +169,7 @@ spotless {
          */
         excludeJava()
         greclipse()
-        indentWithSpaces(4)
+        leadingTabsToSpaces(4)
     }
     groovyGradle {
         // same as groovy, but for .gradle (defaults to "*.gradle")
@@ -178,6 +178,6 @@ spotless {
         //licenseHeader(header)
 
         greclipse()
-        indentWithSpaces(4)
+        leadingTabsToSpaces(4)
     }
 }
