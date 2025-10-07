@@ -59,6 +59,13 @@ bslBaseline {
                     """.stripMargin("|")
 
     // ------------------------------------------------------------
+    // [Optional] Control which plugins are enabled.
+    // ------------------------------------------------------------
+
+    /** [Optional] Whether to add the shadowJar plugin. Default: `true`. */
+    enablePlugins.shadowJar = false
+
+    // ------------------------------------------------------------
     // [Optional] S3 bucket file upload configuration.
     // ------------------------------------------------------------
 
