@@ -8,6 +8,22 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ---
 
+## [Unreleased] - YYYY-MM-DD
+
+[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/5.1.0...HEAD
+
+### Changed
+
+* RAD-237: Bumped Java version from 17 to 21.
+
+## [5.1.0] - 2025-10-07
+
+[5.0.0]: https://github.com/brightsparklabs/gradle-baseline/compare/5.0.0...5.1.0
+
+### Added
+
+* RAD-237: Added support for disabling `shadowJar`.
+
 ## [5.0.0] - 2025-10-01
 
 [5.0.0]: https://github.com/brightsparklabs/gradle-baseline/compare/4.10.0...5.0.0
