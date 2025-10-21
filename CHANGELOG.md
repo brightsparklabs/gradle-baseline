@@ -8,9 +8,9 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ---
 
-## [Unreleased] - YYYY-MM-DD
+## [6.0.0] - 2025-10-21
 
-[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/5.1.0...HEAD
+[6.0.0]: https://github.com/brightsparklabs/gradle-baseline/compare/5.1.0...6.0.0
 
 ### Changed
 
@@ -18,7 +18,7 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ## [5.1.0] - 2025-10-07
 
-[5.0.0]: https://github.com/brightsparklabs/gradle-baseline/compare/5.0.0...5.1.0
+[5.1.0]: https://github.com/brightsparklabs/gradle-baseline/compare/5.0.0...5.1.0
 
 ### Added
 
