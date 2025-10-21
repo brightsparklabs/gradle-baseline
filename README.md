@@ -9,6 +9,7 @@ Applies brightSPARK Labs standardisation to gradle projects.
 
 | Plugin Version | Gradle Version | Java Version
 | -------------- | -------------- | ------------
+| 6.x.y          | 9.x.y          | 21
 | 5.x.y          | 9.x.y          | 17
 | 4.x.y          | 8.x.y          | 17
 | 3.x.y          | 7.x.y          | 17
@@ -57,6 +58,13 @@ bslBaseline {
                       | * Refer to LICENSE at repository root for license details.
                       | */
                     """.stripMargin("|")
+
+    // ------------------------------------------------------------
+    // [Optional] Control which plugins are enabled.
+    // ------------------------------------------------------------
+
+    /** [Optional] Whether to add the shadowJar plugin. Default: `true`. */
+    enablePlugins.shadowJar = false
 
     // ------------------------------------------------------------
     // [Optional] S3 bucket file upload configuration.
