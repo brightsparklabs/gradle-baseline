@@ -50,7 +50,7 @@ pluginVersionBenManesVersions = "0.53.0"
 pluginVersionUseLatestVersions = "0.2.19"
 pluginVersionDependencyCheck = "12.1.9"
 pluginVersionShadow = "8.1.1"
-pluginVersionLicenseReport = "2.9"
+pluginVersionLicenseReport = "3.0.1"
 versionAwsSdkBom = "2.39.5"
 versionSpockBom = "2.4-M6-groovy-4.0"
 
