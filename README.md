@@ -26,9 +26,9 @@ Applies brightSPARK Labs standardisation to gradle projects.
 
 To publish a new version:
 
-* Update `gradle/libs.versions.toml` ensuring `versionErrorproneCore` is set appropriately as per
-  the notes in there.
+* Update `gradle/libs.versions.toml` ensuring `versionErrorproneCore` is set appropriately as per the notes in there.
 * Ensure `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy` references the same version.
+* If bumping Java, then ensure the right version is specified in `.github/` files.
 * Use `git flow` to merge it into `master`.
 * Push `master` and the CI server will publish via `./gradlew publishPlugins`.
 
