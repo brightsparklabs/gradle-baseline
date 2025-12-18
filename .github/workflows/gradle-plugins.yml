@@ -19,5 +19,3 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    with:
-      java_version: "21"
