@@ -22,7 +22,7 @@ Applies brightSPARK Labs standardisation to gradle projects.
 ./gradlew build
 ```
 
-## Publishing
+### Publishing
 
 To publish a new version:
 
