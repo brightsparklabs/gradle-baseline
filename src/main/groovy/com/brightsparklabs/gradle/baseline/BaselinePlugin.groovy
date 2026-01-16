@@ -154,7 +154,7 @@ public class BaselinePlugin implements Plugin<Project> {
                 project.processResources {
                     from(versionFile)
                     // Required by Gradle 7.
-                    duplicatesStrategy 'include'
+                    duplicatesStrategy = 'include'
                 }
             }
         }
