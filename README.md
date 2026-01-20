@@ -2,6 +2,7 @@
 
 [![Build Status](https://github.com/brightsparklabs/gradle-baseline/actions/workflows/gradle-plugins.yml/badge.svg)](https://github.com/brightsparklabs/gradle-baseline/actions/workflows/gradle-plugins.yml)
 [![Gradle Plugin](https://img.shields.io/gradle-plugin-portal/v/com.brightsparklabs.gradle.baseline)](https://plugins.gradle.org/plugin/com.brightsparklabs.gradle.baseline)
+[![Gradle Plugin](https://img.shields.io/gradle-plugin-portal/v/com.brightsparklabs.gradle.baseline-uberjar)](https://plugins.gradle.org/plugin/com.brightsparklabs.gradle.baseline-uberjar)
 
 Applies brightSPARK Labs standardisation to gradle projects.
 
@@ -39,6 +40,9 @@ To publish a new version:
 
 plugins {
     id 'com.brightsparklabs.gradle.baseline' version '<version>'
+
+    // Add the following as well if uberjar support is required.
+    id 'com.brightsparklabs.gradle.baseline-uberjar' version '<version>'
 }
 ```
 
@@ -58,13 +62,6 @@ bslBaseline {
                       | * Refer to LICENSE at repository root for license details.
                       | */
                     """.stripMargin("|")
-
-    // ------------------------------------------------------------
-    // [Optional] Control which plugins are enabled.
-    // ------------------------------------------------------------
-
-    /** [Optional] Whether to add the shadowJar plugin. Default: `true`. */
-    enablePlugins.shadowJar = false
 
     // ------------------------------------------------------------
     // [Optional] S3 bucket file upload configuration.
@@ -252,13 +249,16 @@ The following plugins are currently bundled in automatically:
 - [OWASP](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) plugin
   for vulnerability dependency checks.
     - `dependencyCheckAnalyze` to check for vulnerabilities.
-- [Shadow](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) plugin
-  enables the creation of fat jars.
-    - `shadowJar` to generate fat jars.
 - [License Report](https://plugins.gradle.org/plugin/com.github.jk1.dependency-license-report) for
   generating reports about the licenses of dependencies
     - `generateLicenseReport` to generate a license report.
     - `checkLicense` to verify the licenses of the dependencies are allowed.
+
+If the `com.brightsparklabs.gradle.baseline-uberjar` plugin is added, this will bundle in:
+
+- [Shadow](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) plugin
+  enables the creation of fat jars.
+    - `shadowJar` to generate fat jars.
 
 ## Licenses
 

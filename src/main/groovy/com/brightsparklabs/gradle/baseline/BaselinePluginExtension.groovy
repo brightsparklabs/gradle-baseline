@@ -20,19 +20,8 @@ class BaselinePluginExtension {
                              | */
                            """.stripMargin("|")
 
-    /** [Optional] Controls which plugins are added. */
-    EnablePluginsConfig enablePlugins = new EnablePluginsConfig()
-
     /** [Optional] The release deployment configuration. */
     DeployConfig deploy = new DeployConfig()
-}
-
-/**
- * Controls which plugins are added.
- */
-class EnablePluginsConfig {
-    /** [Optional] Whether to add the shadowJar plugin. Default: `true`. */
-    boolean shadowJar = true
 }
 
 /**

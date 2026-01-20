@@ -12,9 +12,13 @@ The changelog is applicable from version `4.6.0` onwards.
 
 [Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/6.0.0...HEAD
 
+**NOTE: CONTAINS BREAKING CHANGES.**
+
 ### Added
 
 ### Changed
+
+* RAD-244: Move uberjar support into separate plugin `com.brightsparklabs.gradle.baseline-uberjar` (**BREAKING CHANGE**).
 
 ### Deprecated
 
@@ -30,9 +34,11 @@ The changelog is applicable from version `4.6.0` onwards.
 
 [6.0.0]: https://github.com/brightsparklabs/gradle-baseline/compare/5.1.0...6.0.0
 
+**NOTE: CONTAINS BREAKING CHANGES.**
+
 ### Changed
 
-* RAD-237: Bumped Java version from 17 to 21.
+* RAD-237: Bumped Java version from 17 to 21 (**BREAKING CHANGE**).
 
 ## [5.1.0] - 2025-10-07
 
@@ -46,9 +52,11 @@ The changelog is applicable from version `4.6.0` onwards.
 
 [5.0.0]: https://github.com/brightsparklabs/gradle-baseline/compare/4.10.0...5.0.0
 
+**NOTE: CONTAINS BREAKING CHANGES.**
+
 ### Changed
 
-* RAD-237: Bumped Gradle major version from 8 to 9.
+* RAD-237: Bumped Gradle major version from 8 to 9 (**BREAKING CHANGE**).
 
 ## [4.10.0] - 2025-09-05
 

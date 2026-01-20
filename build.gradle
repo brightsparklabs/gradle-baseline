@@ -114,6 +114,17 @@ gradlePlugin {
             tags.set(['brightsparklabs', 'baseline'])
             implementationClass = "com.brightsparklabs.gradle.baseline.BaselinePlugin"
         }
+        uberjar {
+            id = "com.brightsparklabs.gradle.baseline-uberjar"
+            displayName = "Gradle Baseline Uberjar at brightSPARK Labs"
+            description = "Applies brightSPARK Labs Uberjar standardisation to gradle projects"
+            tags.set([
+                'brightsparklabs',
+                'baseline',
+                'uberjar'
+            ])
+            implementationClass = "com.brightsparklabs.gradle.baseline.BaselineUberjarPlugin"
+        }
     }
 }
 
@@ -126,7 +137,7 @@ sourceSets {
 gradlePlugin.testSourceSets(sourceSets.functionalTest)
 configurations.functionalTestImplementation.extendsFrom(configurations.testImplementation)
 
-// Add a task to run the functional tests
+// Add a task to run the functional tests.
 task functionalTest(type: Test) {
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
@@ -137,8 +148,7 @@ check {
     dependsOn(tasks.functionalTest)
 }
 
-// NOTE: No tests are currently run, so we must add the following to prevent Gradle 9 from raising
-// an error.
+// NOTE: No tests are currently run, so we must add the following to prevent Gradle 9 from raising an error.
 // See https://docs.gradle.org/current/userguide/upgrading_major_version_9.html#test_task_fails_when_no_tests_are_discovered
 // TODO RAD-238: Configure Gradle Baseline tests.
 tasks.withType(AbstractTestTask).configureEach {
