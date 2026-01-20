@@ -19,6 +19,7 @@ The changelog is applicable from version `4.6.0` onwards.
 ### Changed
 
 * RAD-244: Move uberjar support into separate plugin `com.brightsparklabs.gradle.baseline-uberjar` (**BREAKING CHANGE**).
+* RAD-244: Convert README from Markdown to Asciidoc.
 
 ### Deprecated
 

@@ -70,14 +70,18 @@ class S3DeployConfig {
      * [Optional] The endpoint to upload files to. This value overrides the default AWS
      * endpoint, and allows files to be uploaded to any S3-compatible storage. For example, files
      * could be uploaded to a local MinIO instance by setting this value to
-     * "http://localhost:9000". Default: unset.
+     * "http://localhost:9000".
+     *
+     * Default: unset.
      */
     String endpointOverride
 
     /**
      * [Optional] The name of the profile used to access the S3 bucket. The profile must exist
      * within the `~/.aws/credentials` file. If unset, the AWS SDK will use the "default" profile
-     * set within the system. Default: unset.
+     * set within the system.
+     *
+     * Default: unset.
      */
     String profile
 }
