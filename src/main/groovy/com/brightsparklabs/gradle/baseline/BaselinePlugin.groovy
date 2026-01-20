@@ -99,7 +99,6 @@ public class BaselinePlugin implements Plugin<Project> {
         setupStaleDependencyChecks(project)
         setupTestCoverage(project)
         setupVulnerabilityDependencyChecks(project)
-        setupShadowJar(project, config)
         setupDependencyLicenseReport(project)
         setupDeployment(project, config)
 
@@ -284,29 +283,6 @@ public class BaselinePlugin implements Plugin<Project> {
     private static void setupVulnerabilityDependencyChecks(final Project project) {
         project.plugins.apply "org.owasp.dependencycheck"
         addTaskAlias(project, project.dependencyCheckAnalyze)
-    }
-
-    private static void setupShadowJar(final Project project, BaselinePluginExtension config) {
-        project.afterEvaluate {
-            if (!config.enablePlugins.shadowJar) {
-                project.logger.lifecycle("Not appling the `shadowJar` plugin from BSL gradle-baseline")
-                return
-            }
-
-            project.plugins.apply "java"
-            project.plugins.apply "com.github.johnrengelman.shadow"
-
-            // Set zip64 to true so that our zip files are able to contain more than 65535 files
-            // and support files greater than 4GB in size.
-            project.tasks.named("shadowJar") {
-                it.setProperty("zip64", true)
-            }
-            project.tasks.withType(Zip).configureEach {
-                it.setZip64(true)
-            }
-
-            addTaskAlias(project, project.shadowJar)
-        }
     }
 
     private void setupDependencyLicenseReport(final Project project) {
