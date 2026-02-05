@@ -33,7 +33,7 @@ public class BaselineUberjarPlugin implements Plugin<Project> {
 
     private static void setupShadowJar(final Project project) {
         project.plugins.apply "java"
-        project.plugins.apply "com.github.johnrengelman.shadow"
+        project.plugins.apply "com.gradleup.shadow"
 
         // Set zip64 to true so that our zip files are able to contain more than 65535 files
         // and support files greater than 4GB in size.
