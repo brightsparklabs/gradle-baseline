@@ -280,7 +280,7 @@ Applying this plugin will automatically apply and configure the following plugin
 
 Applying this plugin will automatically apply and configure the following plugins:
 
-. https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow[Shadow] plugin enables the creation of uberjars.
+. https://plugins.gradle.org/plugin/com.gradleup.shadow[Shadow] plugin enables the creation of uberjars.
 .. `shadowJar` to generate uberjars.
 
 == Licenses
