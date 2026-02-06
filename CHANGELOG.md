@@ -20,7 +20,7 @@ The changelog is applicable from version `4.6.0` onwards.
 
 * RAD-244: Move uberjar support into separate plugin `com.brightsparklabs.gradle.baseline-uberjar` (**BREAKING CHANGE**).
 * RAD-244: Convert README from Markdown to Asciidoc.
-* RAD-245: Replace deprecated 'johnrengelman shadow' plugin with the latest 'gradleup shadow' plugin.
+* RAD-245: Replace deprecated 'Johnrengelman Shadow' plugin with the latest 'Gradleup Shadow' plugin.
 
 ### Deprecated
 
