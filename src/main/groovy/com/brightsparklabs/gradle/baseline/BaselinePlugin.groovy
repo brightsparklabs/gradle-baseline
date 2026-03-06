@@ -43,7 +43,7 @@ public class BaselinePlugin implements Plugin<Project> {
 
     /** Version of error_prone_core to add to all projects. For details of why this needs to be
      * added, refer to the errorprone plugin's `README`. */
-    private static final String ERRORPRONE_CORE_VERSION = '2.20.0'
+    private static final String ERRORPRONE_CORE_VERSION = '2.48.0'
 
     // -------------------------------------------------------------------------
     // INSTANCE VARIABLES
@@ -72,12 +72,15 @@ public class BaselinePlugin implements Plugin<Project> {
         def defaultVersion = '0.0.0-UNKNOWN'
         // Must set execution directory as in some instance (e.g. Alpine OS) the command
         // gets run from the Gradle daemon directory rather than the project directory.
-        def versionProcess = "git describe --always --dirty".execute([], project.rootDir)
-        def stdout = new StringBuilder()
-        def stderr = new StringBuilder()
-        versionProcess.waitForProcessOutput(stdout, stderr)
-        if (versionProcess.exitValue() == 0) {
-            project.version = stdout.toString().trim()
+        def gitVersionProvider = project.providers.exec {
+            commandLine("git", "describe", "--always", "--dirty")
+            workingDir(project.rootDir)
+        }
+        def stdout = gitVersionProvider.standardOutput.asText.get().trim()
+        def stderr = gitVersionProvider.standardError.asText.get()
+
+        if (gitVersionProvider.result.get().exitValue == 0) {
+            project.version = stdout
         } else {
             project.logger.warn(
                     "{} - Could not derive project version from git. Defaulting to: `{}`\n\tstdout: {}\n\tstderr: {}",
