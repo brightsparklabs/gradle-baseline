@@ -12,9 +12,9 @@
 # `gradle.properties` file (see https://github.com/dependabot/dependabot-core/issues/1618).
 
 [versions]
-pluginVersionSpotless = "7.2.1"
+pluginVersionSpotless = "8.3.0"
 
-pluginVersionErrorprone = "4.3.0"
+pluginVersionErrorprone = "5.1.0"
 #  ___ __  __ ____   ___  ____ _____  _    _   _ _____
 # |_ _|  \/  |  _ \ / _ \|  _ \_   _|/ \  | \ | |_   _|
 #  | || |\/| | |_) | | | | |_) || | / _ \ |  \| | | |
@@ -33,18 +33,18 @@ pluginVersionErrorprone = "4.3.0"
 #
 #       https://github.com/tbroyer/gradle-errorprone-plugin/tree/<version>
 #
-#   2. Open up the `build.gradle.kts` file for that version:
+#   2. Open up the `libs.versions.toml` file for that version:
 #
-#       https://github.com/tbroyer/gradle-errorprone-plugin/blob/<version>/build.gradle.kts
+#       https://github.com/tbroyer/gradle-errorprone-plugin/blob/<version>/gradle/libs.versions.toml
 #
-#   3. Look for the errorprone version being used (as of 2024-03-06 this was
-#      stored in the variable `errorproneVersion`).
+#   3. Look for the errorprone version being used (as of 2026-03-05 this was
+#      stored in the variable `errorprone-core` where it references the `errorprone` version).
 #
 #   4. Use that version in the variable below.
 #
 # IMPORTANT: If you update this version, ensure you update
 # `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy`.
-versionErrorproneCore = "2.20.0"
+versionErrorproneCore = "2.48.0"
 
 pluginVersionBenManesVersions = "0.53.0"
 pluginVersionUseLatestVersions = "0.2.19"
