@@ -92,12 +92,10 @@ dependencies {
 project.description = "Applies brightSPARK Labs standardisation to gradle projects"
 project.group       = "com.brightsparklabs"
 
-def gitDescribeProvider = project.providers.exec {
+project.version = project.providers.exec {
     commandLine("git", "describe", "--always", "--dirty")
     workingDir(project.rootDir)
-}.standardOutput.asText
-.map { it.trim() }
-.orElse("0.0.0-UNKNOWN")
+}.standardOutput.asText.map { it.trim() }.orElse("0.0.0-UNKNOWN").get()
 
 project.ext.scm     = "https://github.com/brightsparklabs/gradle-baseline.git"
 project.ext.url     = "https://github.com/brightsparklabs/gradle-baseline"
