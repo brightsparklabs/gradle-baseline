@@ -9,12 +9,12 @@
 
 name: Gradle Plugins Workflow
 on: [pull_request, push]
- 
+
 jobs:
   call-gradle-workflow:
     uses: brightsparklabs/github-actions/.github/workflows/gradle-plugins.yml@master
     with:
-      java_version: "21"
+      java_version: "25"
     secrets: inherit
     permissions:
       contents: write

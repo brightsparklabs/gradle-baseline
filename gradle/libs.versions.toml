@@ -12,9 +12,9 @@
 # `gradle.properties` file (see https://github.com/dependabot/dependabot-core/issues/1618).
 
 [versions]
-pluginVersionSpotless = "7.2.1"
+pluginVersionSpotless = "8.3.0"
 
-pluginVersionErrorprone = "4.3.0"
+pluginVersionErrorprone = "5.1.0"
 #  ___ __  __ ____   ___  ____ _____  _    _   _ _____
 # |_ _|  \/  |  _ \ / _ \|  _ \_   _|/ \  | \ | |_   _|
 #  | || |\/| | |_) | | | | |_) || | / _ \ |  \| | | |
@@ -33,25 +33,25 @@ pluginVersionErrorprone = "4.3.0"
 #
 #       https://github.com/tbroyer/gradle-errorprone-plugin/tree/<version>
 #
-#   2. Open up the `build.gradle.kts` file for that version:
+#   2. Open up the `libs.versions.toml` file for that version:
 #
-#       https://github.com/tbroyer/gradle-errorprone-plugin/blob/<version>/build.gradle.kts
+#       https://github.com/tbroyer/gradle-errorprone-plugin/blob/<version>/gradle/libs.versions.toml
 #
-#   3. Look for the errorprone version being used (as of 2024-03-06 this was
-#      stored in the variable `errorproneVersion`).
+#   3. Look for the errorprone version being used (as of 2026-03-05 this was
+#      stored in the variable `errorprone-core` where it references the `errorprone` version).
 #
 #   4. Use that version in the variable below.
 #
 # IMPORTANT: If you update this version, ensure you update
 # `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy`.
-versionErrorproneCore = "2.20.0"
+versionErrorproneCore = "2.48.0"
 
 pluginVersionBenManesVersions = "0.53.0"
 pluginVersionUseLatestVersions = "0.2.19"
-pluginVersionDependencyCheck = "12.1.6"
-pluginVersionShadow = "8.1.1"
+pluginVersionDependencyCheck = "12.1.9"
+pluginVersionShadow = "9.3.1"
 pluginVersionLicenseReport = "2.9"
-versionAwsSdkBom = "2.34.7"
+versionAwsSdkBom = "2.41.0"
 versionSpockBom = "2.4-M6-groovy-4.0"
 
 [plugins]
@@ -62,7 +62,7 @@ benManesVersions = { id = "com.github.ben-manes.versions", version.ref = "plugin
 useLatestVersions = { id = "se.patrikerdes.use-latest-versions", version.ref = "pluginVersionUseLatestVersions" }
 dependencyCheck = { id = "org.owasp.dependencycheck", version.ref = "pluginVersionDependencyCheck" }
 licenseReport = { id = "com.github.jk1.dependency-license-report", version.ref = "pluginVersionLicenseReport" }
-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "pluginVersionShadow" }
+shadow = { id = "com.gradleup.shadow", version.ref = "pluginVersionShadow" }
 
 [libraries]
 spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "pluginVersionSpotless" }
@@ -71,7 +71,7 @@ errorProneCore = { group = "com.google.errorprone", name = "error_prone_core", v
 benManesVersions = { group = "com.github.ben-manes", name = "gradle-versions-plugin", version.ref = "pluginVersionBenManesVersions" }
 useLatestVersions = { group = "se.patrikerdes", name = "gradle-use-latest-versions-plugin", version.ref = "pluginVersionUseLatestVersions" }
 dependencyCheck = { group = "org.owasp", name = "dependency-check-gradle", version.ref = "pluginVersionDependencyCheck" }
-shadow = { group = "com.github.johnrengelman.shadow", name = "com.github.johnrengelman.shadow.gradle.plugin", version.ref = "pluginVersionShadow" }
+shadow = { group = "com.gradleup.shadow", name = "com.gradleup.shadow.gradle.plugin", version.ref = "pluginVersionShadow" }
 licenseReport = { group = "com.github.jk1", name = "gradle-license-report", version.ref = "pluginVersionLicenseReport" }
 awsSdkBom = { group = "software.amazon.awssdk", name = "bom", version.ref = "versionAwsSdkBom" }
 awsSdkS3 = { group = "software.amazon.awssdk", name = "s3" }
