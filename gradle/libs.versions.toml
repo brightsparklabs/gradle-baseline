@@ -48,7 +48,7 @@ versionErrorproneCore = "2.48.0"
 
 pluginVersionBenManesVersions = "0.53.0"
 pluginVersionUseLatestVersions = "0.2.19"
-pluginVersionDependencyCheck = "12.1.9"
+pluginVersionDependencyCheck = "12.2.0"
 pluginVersionShadow = "9.3.1"
 pluginVersionLicenseReport = "2.9"
 versionAwsSdkBom = "2.41.0"
