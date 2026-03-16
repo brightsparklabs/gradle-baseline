@@ -40,6 +40,16 @@ To publish a new version:
 . Use `git flow` to merge it into `master`.
 . Push `master` and the CI server will publish via `./gradlew publishPlugins`.
 
+==== Test publish
+
+To test publishing locally:
+
+[source,shell]
+----
+$ ./gradlew publishPluginMavenPublicationToMavenLocal
+$ ls -l ~/.m2/repository/com/brightsparklabs/gradle-baseline/
+----
+
 == Usage
 
 [source,groovy]
