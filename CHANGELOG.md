@@ -10,18 +10,11 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ## [Unreleased] - YYYY-MM-DD
 
-[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/6.0.0...HEAD
-
-**NOTE: CONTAINS BREAKING CHANGES.**
+[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/x.y.z...HEAD
 
 ### Added
 
 ### Changed
-
-* RAD-244: Move uberjar support into separate plugin `com.brightsparklabs.gradle.baseline-uberjar` (**BREAKING CHANGE**).
-* RAD-244: Convert README from Markdown to Asciidoc.
-* RAD-245: Replace deprecated 'Johnrengelman Shadow' plugin with the latest 'Gradleup Shadow' plugin.
-* RAD-246: Bumped Java version from 21 to 25 and Gradle to 9.4.0. Upgraded any broken dependencies due to this change. (**BREAKING CHANGE**).
 
 ### Deprecated
 
@@ -30,6 +23,22 @@ The changelog is applicable from version `4.6.0` onwards.
 ### Fixed
 
 ### Security
+
+---
+
+## [7.0.0] - 2026-03-16
+
+[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/6.0.0...7.0.0
+
+**NOTE: CONTAINS BREAKING CHANGES.**
+
+### Changed
+
+* RAD-244: Move uberjar support into separate plugin `com.brightsparklabs.gradle.baseline-uberjar` (**BREAKING CHANGE**).
+* RAD-244: Convert README from Markdown to Asciidoc.
+* RAD-245: Replace deprecated 'Johnrengelman Shadow' plugin with the latest 'Gradleup Shadow' plugin.
+* RAD-246: Bumped Java version from 21 to 25 and Gradle to 9.4.0.
+  Upgraded any broken dependencies due to this change (**BREAKING CHANGE**).
 
 ---
 

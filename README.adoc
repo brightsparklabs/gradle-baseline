@@ -14,13 +14,13 @@ Applies brightSPARK Labs standardisation to gradle projects.
 |===
 |Plugin Version |Gradle Version |Java Version
 
-|7.x.y |9.1.0 and after |25
-|6.x.y |9.x.y |21
-|5.x.y |9.x.y |17
-|4.x.y |8.x.y |17
-|3.x.y |7.x.y |17
-|2.x.y |7.x.y |11
-|1.x.y |6.x.y |11
+|7.x.y | 9.1.y |25
+|6.x.y | 9.0.y |21
+|5.x.y | 9.x.y |17
+|4.x.y | 8.x.y |17
+|3.x.y | 7.x.y |17
+|2.x.y | 7.x.y |11
+|1.x.y | 6.x.y |11
 |===
 
 == Build
