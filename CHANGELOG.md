@@ -16,6 +16,9 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ### Changed
 
+* RAD-265: Bumped spotless version.
+
+
 ### Deprecated
 
 ### Removed
