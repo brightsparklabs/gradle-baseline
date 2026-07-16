@@ -8,27 +8,23 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ---
 
-## [Unreleased] - YYYY-MM-DD
+## [7.1.0] - 2026-07-16
 
-[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/x.y.z...HEAD
+[7.1.0]: https://github.com/brightsparklabs/gradle-baseline/compare/7.0.0...7.1.0
 
 ### Added
 
+* RAD-266: Added devbox and direnv configuration.
+
 ### Changed
 
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+* RAD-266: Applied major dependency patching.
 
 ---
 
 ## [7.0.0] - 2026-03-16
 
-[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/6.0.0...7.0.0
+[7.0.0]: https://github.com/brightsparklabs/gradle-baseline/compare/6.0.0...7.0.0
 
 **NOTE: CONTAINS BREAKING CHANGES.**
 
@@ -52,6 +48,8 @@ The changelog is applicable from version `4.6.0` onwards.
 
 * RAD-237: Bumped Java version from 17 to 21 (**BREAKING CHANGE**).
 
+---
+
 ## [5.1.0] - 2025-10-07
 
 [5.1.0]: https://github.com/brightsparklabs/gradle-baseline/compare/5.0.0...5.1.0
@@ -59,6 +57,8 @@ The changelog is applicable from version `4.6.0` onwards.
 ### Added
 
 * RAD-237: Added support for disabling `shadowJar`.
+
+---
 
 ## [5.0.0] - 2025-10-01
 
@@ -70,6 +70,8 @@ The changelog is applicable from version `4.6.0` onwards.
 
 * RAD-237: Bumped Gradle major version from 8 to 9 (**BREAKING CHANGE**).
 
+---
+
 ## [4.10.0] - 2025-09-05
 
 [4.10.0]: https://github.com/brightsparklabs/gradle-baseline/compare/4.9.0...4.10.0
@@ -77,6 +79,8 @@ The changelog is applicable from version `4.6.0` onwards.
 ### Changed
 
 * RAD-237: Applied major dependency patching. Bumped Gradle 8 to latest minor release.
+
+---
 
 ## [4.9.0] - 2025-03-03
 

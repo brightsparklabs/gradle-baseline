@@ -12,7 +12,12 @@
 # `gradle.properties` file (see https://github.com/dependabot/dependabot-core/issues/1618).
 
 [versions]
-pluginVersionSpotless = "8.3.0"
+# IMPORTANT: Spotless is pinned to 8.6.0 because versions 8.7.0+ upgraded greclipse
+# from 5.7.0-e4.35 to 6.1.0-e4.39, which breaks Groovy formatting (particularly Spock
+# data tables and whitespace handling). Do not upgrade until greclipse formatting
+# issues are resolved.
+# See: https://github.com/groovy/groovy-eclipse/issues/1681
+pluginVersionSpotless = "8.6.0"
 
 pluginVersionErrorprone = "5.1.0"
 #  ___ __  __ ____   ___  ____ _____  _    _   _ _____
@@ -44,14 +49,14 @@ pluginVersionErrorprone = "5.1.0"
 #
 # IMPORTANT: If you update this version, ensure you update
 # `ERRORPRONE_CORE_VERSION` in `BaselinePlugin.groovy`.
-versionErrorproneCore = "2.48.0"
+versionErrorproneCore = "2.50.0"
 
-pluginVersionBenManesVersions = "0.53.0"
+pluginVersionBenManesVersions = "0.54.0"
 pluginVersionUseLatestVersions = "0.2.19"
-pluginVersionDependencyCheck = "12.1.9"
-pluginVersionShadow = "9.3.1"
-pluginVersionLicenseReport = "2.9"
-versionAwsSdkBom = "2.41.0"
+pluginVersionDependencyCheck = "12.2.2"
+pluginVersionShadow = "9.5.1"
+pluginVersionLicenseReport = "3.1.4"
+versionAwsSdkBom = "2.48.1"
 versionSpockBom = "2.4-M6-groovy-4.0"
 
 [plugins]
