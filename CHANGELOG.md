@@ -8,6 +8,16 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ---
 
+## [7.1.1] - 2026-09-15
+
+[7.1.1]: https://github.com/brightsparklabs/gradle-baseline/compare/7.1.0...7.1.1
+
+### Fixed
+
+* INS-765: Drop to Spotless 8.5.0 until greclipse issues are resolved.
+
+---
+
 ## [7.1.0] - 2026-07-16
 
 [7.1.0]: https://github.com/brightsparklabs/gradle-baseline/compare/7.0.0...7.1.0
