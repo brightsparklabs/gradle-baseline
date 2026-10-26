@@ -10,7 +10,7 @@ The changelog is applicable from version `4.6.0` onwards.
 
 ## [7.2.0] - 2026-10-27
 
-[Unreleased]: https://github.com/brightsparklabs/gradle-baseline/compare/7.1.1...7.2.0
+[7.2.0]: https://github.com/brightsparklabs/gradle-baseline/compare/7.1.1...7.2.0
 
 ### Changed
 
